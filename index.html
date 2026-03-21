@@ -2785,29 +2785,55 @@
       </div><!-- /home-content -->
 
       <!-- ── Track Switch Button — bottom right ── -->
-      <button id="track-switch-btn" onclick="BGM.nextHomeTrack()" title="Next Track"
-        style="
-          position:absolute;
-          bottom:clamp(14px,2.5vh,22px);
-          right:clamp(14px,2.5vw,22px);
-          z-index:100;
-          background:rgba(0,245,255,0.08);
-          border:1.5px solid rgba(0,245,255,0.35);
-          border-radius:50%;
-          width:clamp(38px,5vw,48px);
-          height:clamp(38px,5vw,48px);
-          display:flex;align-items:center;justify-content:center;
-          cursor:pointer;
-          color:#00f5ff;
-          font-size:clamp(16px,2.2vw,20px);
-          box-shadow:0 0 14px rgba(0,245,255,0.18);
-          transition:background 0.2s, box-shadow 0.2s, transform 0.15s;
-        "
-        onmouseover="this.style.background='rgba(0,245,255,0.18)';this.style.boxShadow='0 0 22px rgba(0,245,255,0.38)'"
-        onmouseout="this.style.background='rgba(0,245,255,0.08)';this.style.boxShadow='0 0 14px rgba(0,245,255,0.18)'"
-        onmousedown="this.style.transform='scale(0.92)'"
-        onmouseup="this.style.transform='scale(1)'"
-      >⏭</button>
+      <!-- ── Track Controls — bottom right ── -->
+      <div style="
+        position:absolute;
+        bottom:clamp(14px,2.5vh,22px);
+        right:clamp(14px,2.5vw,22px);
+        z-index:100;
+        display:flex;
+        gap:8px;
+        align-items:center;
+      ">
+        <button id="track-prev-btn" onclick="BGM.prevHomeTrack()" title="Previous Track"
+          style="
+            background:rgba(0,245,255,0.08);
+            border:1.5px solid rgba(0,245,255,0.35);
+            border-radius:50%;
+            width:clamp(38px,5vw,48px);
+            height:clamp(38px,5vw,48px);
+            display:flex;align-items:center;justify-content:center;
+            cursor:pointer;
+            color:#00f5ff;
+            font-size:clamp(16px,2.2vw,20px);
+            box-shadow:0 0 14px rgba(0,245,255,0.18);
+            transition:background 0.2s, box-shadow 0.2s, transform 0.15s;
+          "
+          onmouseover="this.style.background='rgba(0,245,255,0.18)';this.style.boxShadow='0 0 22px rgba(0,245,255,0.38)'"
+          onmouseout="this.style.background='rgba(0,245,255,0.08)';this.style.boxShadow='0 0 14px rgba(0,245,255,0.18)'"
+          onmousedown="this.style.transform='scale(0.92)'"
+          onmouseup="this.style.transform='scale(1)'"
+        >⏮</button>
+        <button id="track-switch-btn" onclick="BGM.nextHomeTrack()" title="Next Track"
+          style="
+            background:rgba(0,245,255,0.08);
+            border:1.5px solid rgba(0,245,255,0.35);
+            border-radius:50%;
+            width:clamp(38px,5vw,48px);
+            height:clamp(38px,5vw,48px);
+            display:flex;align-items:center;justify-content:center;
+            cursor:pointer;
+            color:#00f5ff;
+            font-size:clamp(16px,2.2vw,20px);
+            box-shadow:0 0 14px rgba(0,245,255,0.18);
+            transition:background 0.2s, box-shadow 0.2s, transform 0.15s;
+          "
+          onmouseover="this.style.background='rgba(0,245,255,0.18)';this.style.boxShadow='0 0 22px rgba(0,245,255,0.38)'"
+          onmouseout="this.style.background='rgba(0,245,255,0.08)';this.style.boxShadow='0 0 14px rgba(0,245,255,0.18)'"
+          onmousedown="this.style.transform='scale(0.92)'"
+          onmouseup="this.style.transform='scale(1)'"
+        >⏭</button>
+      </div>
     </div>
 
     <!-- Game Over Screen -->
@@ -3920,6 +3946,10 @@ const BGM = (function(){
     _playHomeTrack(_currentTrackIndex + 1);
   }
 
+  function prevHomeTrack(){
+    _playHomeTrack(_currentTrackIndex - 1);
+  }
+
   function startHome(){
     if(!musicEnabled||muted) return;
     _run=false; clearTimeout(_sid);
@@ -3984,7 +4014,7 @@ const BGM = (function(){
 
   function start(){ startHome(); }
   function setEnabled(v){ musicEnabled=v; if(v) startHome(); else stop(); }
-  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
+  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
 })();
 
 // ─── Confetti system ─────────────────────────────────────────────────────────
