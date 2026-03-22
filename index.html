@@ -3935,7 +3935,17 @@ const BGM = (function(){
       _homeAudio.loop = false;
       _homeAudio.volume = Math.min(1, sfxVolume * 0.8);
       _homeAudio.onended = () => { if(!_isGame) nextHomeTrack(); };
-      if(musicEnabled && !muted) _homeAudio.play().catch(()=>{});
+      const playPromise = _homeAudio.play();
+      if(playPromise !== undefined){
+        playPromise.catch(()=>{
+          // Autoplay blocked — retry on next user interaction
+          const retry = () => {
+            if(_homeAudio && !_isGame) _homeAudio.play().catch(()=>{});
+            document.removeEventListener('pointerdown', retry);
+          };
+          document.addEventListener('pointerdown', retry, {once:true});
+        });
+      }
       // Update button UI
       const btn = document.getElementById('track-switch-btn');
       if(btn) btn.title = 'Track ' + (_currentTrackIndex+1) + '/' + _homeTracks.length;
@@ -3951,12 +3961,13 @@ const BGM = (function(){
   }
 
   function startHome(){
-    if(!musicEnabled||muted) return;
     _run=false; clearTimeout(_sid);
     _isGame=false; _step=0; _bar=0; _bpm=H_BPM; _tbpm=H_BPM; _slow=false;
 
     // Stop game audio
     if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
+
+    if(!musicEnabled||muted) return;
 
     // Pick random track and play
     _playHomeTrack(Math.floor(Math.random() * _homeTracks.length));
@@ -3987,7 +3998,16 @@ const BGM = (function(){
       _gameAudio = new Audio(randomTrack);
       _gameAudio.loop = true;
       _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
-      _gameAudio.play().catch(()=>{});
+      const playPromise = _gameAudio.play();
+      if(playPromise !== undefined){
+        playPromise.catch(()=>{
+          const retry = () => {
+            if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
+            document.removeEventListener('pointerdown', retry);
+          };
+          document.addEventListener('pointerdown', retry, {once:true});
+        });
+      }
     } catch(e) {}
   }
 
@@ -7946,9 +7966,12 @@ function _bootGame(){
   // Hide the HUD layer: it belongs to gameplay only, not the home screen.
   document.getElementById('hud-layer').style.display = 'none';
   if(!_rafId) requestAnimationFrame(ts=>{ lastTime = ts; loop(ts); });
-  // Start background music on first user interaction
+  // Start music — try autoplay, fallback to first interaction
+  try {
+    BGM.startHome();
+  } catch(e) {}
   document.addEventListener('pointerdown', function _startMusic(){
-    if(musicEnabled && !muted) BGM.startHome();
+    if(musicEnabled && !muted && !BGM._homeAudio) BGM.startHome();
     document.removeEventListener('pointerdown', _startMusic);
   }, {once:true});
 
