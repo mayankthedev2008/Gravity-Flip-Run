@@ -6221,7 +6221,7 @@ function returnToMenu(){
 
   // Restart home particles when returning to menu
   if(window._homeParticles) window._homeParticles.start();
-  if(musicEnabled && !muted) BGM.startHome();
+  BGM.startHome();
   // Hide speed bar — not visible on home screen
   document.getElementById('speed-bar-wrap').classList.remove('visible');
   // Fade out the game-over screen
@@ -6367,6 +6367,8 @@ document.getElementById('pause-quit-btn').addEventListener('click', e=>{
   startScreen.classList.remove('hidden');
   startScreen.style.display = ''; // restore display
   document.getElementById('hud-layer').style.display = 'none'; // hide gameplay HUD
+  // Start home music
+  BGM.startHome();
 });
 
 // ─── Input ────────────────────────────────────────────────────────────────────
