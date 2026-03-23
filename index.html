@@ -2546,6 +2546,77 @@
     50%      { box-shadow:0 0 24px rgba(0,245,255,.65); }
   }
 
+  /* Settings Tabs */
+  .stab-btn {
+    flex: 0 0 auto;
+    padding: clamp(8px,1.5vh,12px) clamp(8px,1.8vw,14px);
+    font-family:'Rajdhani',sans-serif;
+    font-size: clamp(10px,1.8vw,12px);
+    font-weight:800; letter-spacing:1.5px;
+    text-transform:uppercase;
+    background:rgba(255,255,255,0.04);
+    border:1.5px solid rgba(255,255,255,0.12);
+    border-radius:10px; color:rgba(255,255,255,0.5);
+    cursor:pointer; transition:all .18s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    white-space:nowrap;
+  }
+  .stab-btn.active {
+    background:rgba(0,245,255,0.12);
+    border-color:rgba(0,245,255,0.5);
+    color:#00f5ff;
+    box-shadow:0 0 14px rgba(0,245,255,0.25);
+    text-shadow:0 0 10px rgba(0,245,255,0.5);
+  }
+  .stab-btn:active { transform:scale(0.96); }
+  .stab-content { display:flex; flex-direction:column; gap:8px; }
+
+  /* ── Tab row — horizontal scroll, never wraps ── */
+  .stab-row {
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    flex-wrap:nowrap;
+    padding-bottom:4px;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(0,245,255,0.3) rgba(255,255,255,0.04);
+  }
+  .stab-row::-webkit-scrollbar { height:3px; }
+  .stab-row::-webkit-scrollbar-track { background:rgba(255,255,255,0.04); border-radius:4px; }
+  .stab-row::-webkit-scrollbar-thumb { background:rgba(0,245,255,0.35); border-radius:4px; }
+
+  /* ── Custom scrollbar for settings box & other overlays ── */
+  .settings-box::-webkit-scrollbar,
+  .pause-panel::-webkit-scrollbar,
+  .go-card::-webkit-scrollbar,
+  #store-box::-webkit-scrollbar {
+    width: 4px;
+  }
+  .settings-box::-webkit-scrollbar-track,
+  .pause-panel::-webkit-scrollbar-track,
+  .go-card::-webkit-scrollbar-track,
+  #store-box::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.03);
+    border-radius: 4px;
+  }
+  .settings-box::-webkit-scrollbar-thumb,
+  .pause-panel::-webkit-scrollbar-thumb,
+  .go-card::-webkit-scrollbar-thumb,
+  #store-box::-webkit-scrollbar-thumb {
+    background: rgba(0,245,255,0.3);
+    border-radius: 4px;
+  }
+  .settings-box::-webkit-scrollbar-thumb:hover,
+  .pause-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,245,255,0.55);
+  }
+  .settings-box { scrollbar-width:thin; scrollbar-color:rgba(0,245,255,0.3) rgba(255,255,255,0.03); }
+  .go-card { scrollbar-width:thin; scrollbar-color:rgba(255,0,110,0.3) rgba(255,255,255,0.03); }
+  .go-card::-webkit-scrollbar-thumb { background:rgba(255,0,110,0.3); }
+  #store-box { scrollbar-width:thin; scrollbar-color:rgba(0,245,255,0.3) rgba(255,255,255,0.03); }
+
   /* Mission fill — polished gradient, smooth fill preserved */
   #mission-fill {
     background:linear-gradient(90deg,
@@ -2567,72 +2638,7 @@
 
   /* Score val — size defined in base .hud-val + #score-val.hud-val rules above */
 
-  /* ── Game Music Bar — Spotify style ── */
-  #game-music-bar {
-    position:fixed;
-    bottom: 0;
-    left: 0; right: 0;
-    z-index: 199;
-    pointer-events: all;
-    padding: 0 clamp(10px,3vw,20px) clamp(8px,1.5vh,12px);
-  }
-  #game-music-bar-inner {
-    background: rgba(5,8,20,0.92);
-    border: 1px solid rgba(0,245,255,0.2);
-    border-radius: 14px;
-    padding: clamp(8px,1.5vh,12px) clamp(14px,3vw,20px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 0 20px rgba(0,245,255,0.1), 0 -4px 20px rgba(0,0,0,0.5);
-  }
-  #gm-track-name {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(11px,2vw,14px);
-    font-weight: 700;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: 1px;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  #gm-controls {
-    display: flex;
-    align-items: center;
-    gap: clamp(8px,2vw,14px);
-    flex-shrink: 0;
-  }
-  #gm-controls button {
-    background: rgba(0,245,255,0.08);
-    border: 1.5px solid rgba(0,245,255,0.3);
-    border-radius: 50%;
-    color: #00f5ff;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, transform 0.1s;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  #gm-prev, #gm-next {
-    width: clamp(32px,5vw,40px);
-    height: clamp(32px,5vw,40px);
-    font-size: clamp(13px,2.2vw,16px);
-  }
-  #gm-playpause {
-    width: clamp(38px,6vw,46px);
-    height: clamp(38px,6vw,46px);
-    font-size: clamp(15px,2.5vw,18px);
-    background: rgba(0,245,255,0.15);
-    border-color: rgba(0,245,255,0.5);
-    box-shadow: 0 0 12px rgba(0,245,255,0.2);
-  }
-  #gm-controls button:active { transform: scale(0.88); }
-
-</style>
+  /* ── Rotate Device Overlay ── */
   #rotate-overlay {
     display:none;
     position:fixed; inset:0; z-index:9999;
@@ -2642,7 +2648,6 @@
     gap:20px;
   }
   #rotate-overlay.show { display:flex; }
-
   .rotate-icon {
     font-size:72px;
     animation: rotateAnim 1.5s ease-in-out infinite;
@@ -2657,20 +2662,15 @@
   .rotate-title {
     font-family:'Orbitron',monospace;
     font-size:clamp(16px,4vw,22px);
-    font-weight:900;
-    color:#00f5ff;
+    font-weight:900; color:#00f5ff;
     text-shadow:0 0 16px rgba(0,245,255,0.7);
-    letter-spacing:3px;
-    text-align:center;
-    padding:0 20px;
+    letter-spacing:3px; text-align:center; padding:0 20px;
   }
   .rotate-sub {
     font-family:'Rajdhani',sans-serif;
     font-size:clamp(13px,3vw,16px);
     color:rgba(255,255,255,0.5);
-    letter-spacing:2px;
-    text-align:center;
-    padding:0 30px;
+    letter-spacing:2px; text-align:center; padding:0 30px;
   }
 
 </style>
@@ -2727,18 +2727,6 @@
         <div class="hud-best-row">
           <span class="hud-lbl" style="margin-right:4px">★ BEST</span>
           <span class="hud-val pink hud-best-val" id="best-val">0</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Music Player Bar — bottom of screen ── -->
-    <div id="game-music-bar" style="display:none;">
-      <div id="game-music-bar-inner">
-        <div id="gm-track-name">♪ Loading...</div>
-        <div id="gm-controls">
-          <button id="gm-prev" onclick="BGM.prevGameTrack()" title="Previous">⏮</button>
-          <button id="gm-playpause" onclick="BGM.toggleGamePlayPause()" title="Play/Pause">⏸</button>
-          <button id="gm-next" onclick="BGM.nextGameTrack()" title="Next">⏭</button>
         </div>
       </div>
     </div>
@@ -3053,94 +3041,122 @@
         <span class="settings-title">⚙ SETTINGS</span>
         <button class="settings-close-btn" id="settings-close-btn">✕</button>
       </div>
-      <div class="settings-section-label">AUDIO</div>
-      <div class="settings-row">
-        <span class="settings-action-name">🎮 Game Volume</span>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05"
-            style="width:110px;accent-color:#00f5ff;cursor:pointer;" />
-          <span id="sfx-volume-pct" style="font-family:Orbitron,monospace;font-size:12px;color:#00f5ff;min-width:34px;text-align:right;">100%</span>
-        </div>
-      </div>
-      <div class="settings-row" style="margin-top:6px;">
-        <span class="settings-action-name">🔊 SFX Volume</span>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <input type="range" id="ui-sfx-volume-slider" min="0" max="1" step="0.05"
-            style="width:110px;accent-color:#bf00ff;cursor:pointer;" />
-          <span id="ui-sfx-volume-pct" style="font-family:Orbitron,monospace;font-size:12px;color:#bf00ff;min-width:34px;text-align:right;">100%</span>
-        </div>
-      </div>
-      <div class="settings-row" style="margin-top:6px;">
-        <span class="settings-action-name">🎵 Music</span>
-        <button id="music-toggle-btn" style="
-          font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
-          padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
-          border:1.5px solid rgba(191,0,255,.4);
-          background:rgba(191,0,255,.1);color:#bf00ff;
-          transition:all .18s ease;">ON</button>
-      </div>
-      <div class="settings-section-label" style="margin-top:8px;">VISUALS</div>
-      <div class="settings-row">
-        <span class="settings-action-name">Cinematic Effects</span>
-        <button id="cinematic-toggle-btn" style="
-          font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
-          padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
-          border:1.5px solid rgba(0,245,255,.4);
-          background:rgba(0,245,255,.1);color:#00f5ff;
-          transition:all .18s ease;
-        ">ON</button>
-      </div>
-            <div class="settings-section-label" style="margin-top:8px;">CONTROLS</div>
-      <div id="settings-controls-body" class="settings-controls-body"></div>
 
-      <!-- Redeem Code -->
-      <div class="settings-section-label" style="margin-top:8px;">REDEEM CODE</div>
-      <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px;">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input id="redeem-input" type="text" placeholder="Enter code..."
-            style="flex:1;padding:10px 14px;font-family:'Orbitron',monospace;font-size:clamp(11px,1.8vw,13px);
-            font-weight:700;letter-spacing:2px;color:#fff;
-            background:rgba(255,255,255,.05);border:1.5px solid rgba(0,245,255,.3);
-            border-radius:10px;outline:none;transition:border-color .18s;
-            -webkit-user-select:text;user-select:text;" />
-          <button id="redeem-btn" style="
-            padding:10px 18px;font-family:'Orbitron',monospace;font-size:clamp(10px,1.6vw,12px);
-            font-weight:700;letter-spacing:2px;color:#00f5ff;
-            background:rgba(0,245,255,.1);border:1.5px solid rgba(0,245,255,.4);
-            border-radius:10px;cursor:pointer;white-space:nowrap;
-            transition:all .18s cubic-bezier(.34,1.56,.64,1);">REDEEM</button>
-        </div>
-        <div id="redeem-msg" style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
-          letter-spacing:1px;min-height:18px;text-align:center;font-weight:700;"></div>
+      <!-- Tab buttons -->
+      <div class="stab-row">
+        <button class="stab-btn active" data-tab="audio">🎵 AUDIO</button>
+        <button class="stab-btn" data-tab="visuals">✨ VISUALS</button>
+        <button class="stab-btn" data-tab="controls">🎮 CONTROLS</button>
+        <button class="stab-btn" data-tab="redeem">🎁 REDEEM</button>
+        <button class="stab-btn" data-tab="reset" style="border-color:rgba(255,0,60,.3);color:rgba(255,80,80,.7);">🗑 RESET</button>
+      </div>
 
-        <!-- Instagram hint -->
-        <div style="
-          margin-top:6px;
-          background:rgba(255,0,110,0.06);
-          border:1px solid rgba(255,0,110,0.25);
-          border-radius:10px;
-          padding:10px 14px;
-          text-align:center;
-        ">
-          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);
-            color:rgba(255,255,255,0.55);letter-spacing:1.5px;margin-bottom:5px;">
-            🎁 WANT FREE COINS?
+      <!-- AUDIO TAB -->
+      <div class="stab-content" id="stab-audio">
+        <div class="settings-section-label">VOLUME</div>
+        <div class="settings-row">
+          <span class="settings-action-name">🎮 Game Volume</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05"
+              style="width:110px;accent-color:#00f5ff;cursor:pointer;" />
+            <span id="sfx-volume-pct" style="font-family:Orbitron,monospace;font-size:12px;color:#00f5ff;min-width:34px;text-align:right;">100%</span>
           </div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
-            font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;line-height:1.6;">
-            Go to <span style="color:#00f5ff;">CREDITS</span> &amp; Follow us on
-            <span style="color:#ff006e;text-shadow:0 0 8px rgba(255,0,110,0.6);">Instagram</span>
-            to get Redeem Codes! 🚀
+        </div>
+        <div class="settings-row" style="margin-top:6px;">
+          <span class="settings-action-name">🔊 SFX Volume</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="range" id="ui-sfx-volume-slider" min="0" max="1" step="0.05"
+              style="width:110px;accent-color:#bf00ff;cursor:pointer;" />
+            <span id="ui-sfx-volume-pct" style="font-family:Orbitron,monospace;font-size:12px;color:#bf00ff;min-width:34px;text-align:right;">100%</span>
           </div>
+        </div>
+        <div class="settings-section-label" style="margin-top:10px;">MUSIC</div>
+        <div class="settings-row">
+          <span class="settings-action-name">🎵 Background Music</span>
+          <button id="music-toggle-btn" style="
+            font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
+            padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
+            border:1.5px solid rgba(191,0,255,.4);
+            background:rgba(191,0,255,.1);color:#bf00ff;
+            transition:all .18s ease;">ON</button>
+        </div>
+      </div>
+
+      <!-- VISUALS TAB -->
+      <div class="stab-content" id="stab-visuals" style="display:none;">
+        <div class="settings-section-label">EFFECTS</div>
+        <div class="settings-row">
+          <span class="settings-action-name">🎬 Cinematic Effects</span>
+          <button id="cinematic-toggle-btn" style="
+            font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
+            padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
+            border:1.5px solid rgba(0,245,255,.4);
+            background:rgba(0,245,255,.1);color:#00f5ff;
+            transition:all .18s ease;">ON</button>
+        </div>
+      </div>
+
+      <!-- CONTROLS TAB -->
+      <div class="stab-content" id="stab-controls" style="display:none;">
+        <div class="settings-section-label">KEY BINDINGS</div>
+        <div id="settings-controls-body" class="settings-controls-body"></div>
+        <div class="settings-hint" style="margin-top:8px;">Tap a key button, then press any key to rebind. ESC to cancel.</div>
+        <div style="margin-top:12px;">
+          <button class="neon-btn settings-reset-btn" id="settings-reset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);">↺ RESET CONTROLS</button>
+        </div>
+      </div>
+
+      <!-- REDEEM TAB -->
+      <div class="stab-content" id="stab-redeem" style="display:none;">
+        <div class="settings-section-label">REDEEM CODE</div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="redeem-input" type="text" placeholder="Enter code..."
+              style="flex:1;padding:10px 14px;font-family:'Orbitron',monospace;font-size:clamp(11px,1.8vw,13px);
+              font-weight:700;letter-spacing:2px;color:#fff;
+              background:rgba(255,255,255,.05);border:1.5px solid rgba(0,245,255,.3);
+              border-radius:10px;outline:none;transition:border-color .18s;
+              -webkit-user-select:text;user-select:text;" />
+            <button id="redeem-btn" style="
+              padding:10px 18px;font-family:'Orbitron',monospace;font-size:clamp(10px,1.6vw,12px);
+              font-weight:700;letter-spacing:2px;color:#00f5ff;
+              background:rgba(0,245,255,.1);border:1.5px solid rgba(0,245,255,.4);
+              border-radius:10px;cursor:pointer;white-space:nowrap;
+              transition:all .18s cubic-bezier(.34,1.56,.64,1);">REDEEM</button>
+          </div>
+          <div id="redeem-msg" style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
+            letter-spacing:1px;min-height:18px;text-align:center;font-weight:700;"></div>
+          <div style="background:rgba(255,0,110,0.06);border:1px solid rgba(255,0,110,0.25);
+            border-radius:10px;padding:10px 14px;text-align:center;">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);
+              color:rgba(255,255,255,0.55);letter-spacing:1.5px;margin-bottom:5px;">🎁 WANT FREE COINS?</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
+              font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;line-height:1.6;">
+              Go to <span style="color:#00f5ff;">CREDITS</span> &amp; Follow us on
+              <span style="color:#ff006e;text-shadow:0 0 8px rgba(255,0,110,0.6);">Instagram</span>
+              to get Redeem Codes! 🚀
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESET TAB -->
+      <div class="stab-content" id="stab-reset" style="display:none;">
+        <div class="settings-section-label">RESET GAME DATA</div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(12px,2vw,14px);
+            color:rgba(255,255,255,0.55);letter-spacing:1px;line-height:1.6;padding:4px 0;">
+            ⚠️ This will permanently delete all your progress — coins, best score, upgrades, skins and settings.
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+          <button class="neon-btn" id="settings-fullreset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(14px,2.5vh,18px);background:rgba(255,0,60,.1);border-color:rgba(255,0,60,.45);color:rgba(255,80,80,.9);">🗑 RESET ALL GAME DATA</button>
         </div>
       </div>
 
       <div class="settings-footer" style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(255,255,255,.08);padding-top:14px;">
         <button class="neon-btn settings-back-btn" id="settings-back-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);">← BACK</button>
-        <button class="neon-btn settings-reset-btn" id="settings-reset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);">↺ RESET CONTROLS</button>
-        <button class="neon-btn" id="settings-fullreset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);background:rgba(255,0,60,.1);border-color:rgba(255,0,60,.45);color:rgba(255,80,80,.9);">🗑 RESET GAME</button>
       </div>
-      <div class="settings-hint">Click a key button, then press any key to rebind. ESC to cancel.</div>
     </div>
   </div>
 
@@ -4142,9 +4158,6 @@ const BGM = (function(){
     // Stop game audio
     if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
 
-    // Hide game music bar
-    const bar = document.getElementById('game-music-bar');
-    if(bar) bar.style.display = 'none';
 
     if(!musicEnabled||muted) return;
 
@@ -4169,14 +4182,6 @@ const BGM = (function(){
     return '♪ ' + name;
   }
 
-  function _updateGameBar(playing){
-    const bar = document.getElementById('game-music-bar');
-    const btn = document.getElementById('gm-playpause');
-    const nameEl = document.getElementById('gm-track-name');
-    if(bar) bar.style.display = 'block';
-    if(btn) btn.textContent = playing ? '⏸' : '▶';
-    if(nameEl && _currentGameTrackIndex >= 0) nameEl.textContent = _getTrackName(_gameTracks[_currentGameTrackIndex]);
-  }
 
   function _playNextGameTrack(){
     if(!_isGame || !musicEnabled || muted) return;
@@ -4196,12 +4201,10 @@ const BGM = (function(){
     audio.onended = () => { if(_isGame && _gameAudio === audio) _playNextGameTrack(); };
     audio.onerror = () => { if(_isGame && _gameAudio === audio) setTimeout(_playNextGameTrack, 1000); };
     const p = audio.play();
-    _updateGameBar(true);
     if(p !== undefined){
       p.catch(()=>{
-        _updateGameBar(false);
-        const retry = () => {
-          if(_gameAudio === audio && _isGame){ audio.play().catch(()=>{}); _updateGameBar(true); }
+            const retry = () => {
+          if(_gameAudio === audio && _isGame) audio.play().catch(()=>{});
           document.removeEventListener('pointerdown', retry);
         };
         document.addEventListener('pointerdown', retry, {once:true});
@@ -4220,31 +4223,10 @@ const BGM = (function(){
     audio.volume = Math.min(1, sfxVolume * 0.8);
     audio.onended = () => { if(_isGame && _gameAudio === audio) _playNextGameTrack(); };
     audio.onerror = () => { if(_isGame && _gameAudio === audio) setTimeout(_playNextGameTrack, 1000); };
-    audio.play().catch(()=>{ _updateGameBar(false); });
-    _updateGameBar(true);
+    audio.play().catch(()=>{});
   }
 
-  function nextGameTrack(){
-    const idx = (_currentGameTrackIndex + 1) % _gameTracks.length;
-    _playGameTrackAt(idx);
-  }
 
-  function prevGameTrack(){
-    const idx = ((_currentGameTrackIndex - 1) + _gameTracks.length) % _gameTracks.length;
-    _playGameTrackAt(idx);
-  }
-
-  function toggleGamePlayPause(){
-    if(!_gameAudio) return;
-    const btn = document.getElementById('gm-playpause');
-    if(_gameAudio.paused){
-      _gameAudio.play().catch(()=>{});
-      if(btn) btn.textContent = '⏸';
-    } else {
-      _gameAudio.pause();
-      if(btn) btn.textContent = '▶';
-    }
-  }
 
   function startGame(){
     // Stop MP3 home music first
@@ -4293,7 +4275,7 @@ const BGM = (function(){
 
   function start(){ startHome(); }
   function setEnabled(v){ musicEnabled=v; if(v) startHome(); else stop(); }
-  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, toggleHomePlayPause, pauseGameMusic, resumeGameMusic, nextGameTrack, prevGameTrack, toggleGamePlayPause, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
+  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, toggleHomePlayPause, pauseGameMusic, resumeGameMusic, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
 })();
 
 // ─── Confetti system ─────────────────────────────────────────────────────────
@@ -6334,6 +6316,26 @@ function buildSettingsPanel(){
   });
 }
 
+// Settings tab switching
+(function(){
+  const tabs = ['audio','visuals','controls','redeem','reset'];
+  function switchTab(name){
+    tabs.forEach(t=>{
+      const btn = document.querySelector(`.stab-btn[data-tab="${t}"]`);
+      const content = document.getElementById('stab-'+t);
+      if(btn) btn.classList.toggle('active', t===name);
+      if(content) content.style.display = t===name ? 'flex' : 'none';
+    });
+  }
+  document.querySelectorAll('.stab-btn').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      switchTab(btn.dataset.tab);
+    });
+  });
+  switchTab('audio'); // default tab
+})();
+
 // ─── Daily challenge system ───────────────────────────────────────────────────
 const DAILY_CHALLENGES=[
   {desc:'Collect 50 coins',    type:'coins',  target:50,  reward:75},
@@ -6833,6 +6835,7 @@ function initRedeemCode(){
     });
   }
 })();
+
 document.getElementById('restart-btn').addEventListener('click',e=>{e.stopPropagation();sfxPlayBtn();startPlay();});
 // Block touch events on gameover screen from reaching canvas below
 goScreen.addEventListener('touchstart',e=>{ e.stopPropagation(); },{passive:true});
@@ -6898,8 +6901,7 @@ document.getElementById('app').addEventListener('touchstart',function(e){
   if(t && (t.closest('#pause-btn')||t.closest('#pause-overlay')||
      t.closest('#mute-btn')||t.closest('#settings-btn')||t.closest('#settings-overlay')||
      t.closest('#start-btn')||t.closest('#restart-btn')||t.closest('#go-home-btn')||
-     t.closest('#pause-restart-btn')||t.closest('#pause-mute-btn')||
-     t.closest('#game-music-bar'))) return;
+     t.closest('#pause-restart-btn')||t.closest('#pause-mute-btn'))) return;
   e.preventDefault();
   // Map touch → logical canvas coords
   const r=canvas.getBoundingClientRect();
