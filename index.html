@@ -80,7 +80,19 @@
     transform:translateZ(0);
   }
   /* Re-enable pointer events for buttons inside hud-layer */
-  #hud-layer button { pointer-events:all; }
+  #hud-layer button { 
+    pointer-events:all !important; 
+    touch-action:manipulation !important;
+    -webkit-tap-highlight-color:transparent;
+    cursor:pointer;
+  }
+  /* Pause button specifically — make sure it's always tappable */
+  #pause-btn {
+    pointer-events:all !important;
+    touch-action:manipulation !important;
+    -webkit-tap-highlight-color:transparent;
+    z-index:9999 !important;
+  }
 
   /* ── Canvas wrapper: sized and positioned by resizeCanvas() ── */
   #canvas-wrap {
@@ -6429,7 +6441,8 @@ function resumeGame(){
   try{ if(window.CrazyGames && CrazyGames.SDK) CrazyGames.SDK.game.gameplayStart(); }catch(e){}
 }
 
-pauseBtn.addEventListener('click', e=>{ e.stopPropagation(); pauseGame(); });
+pauseBtn.addEventListener('click', e=>{ e.stopPropagation(); e.preventDefault(); pauseGame(); });
+pauseBtn.addEventListener('touchstart', e=>{ e.stopPropagation(); e.preventDefault(); pauseGame(); }, {passive:false});
 resumeBtn.addEventListener('click', e=>{ e.stopPropagation(); resumeGame(); });
 
 // Pause-panel mute toggle — mirrors the hidden #mute-btn state
@@ -6745,13 +6758,13 @@ canvas.addEventListener('pointerdown',function(e){
 // minimum latency. DPR-aware coordinate mapping fixes tap area misalignment.
 document.getElementById('app').addEventListener('touchstart',function(e){
   if(state!==STATE.PLAYING || G.dying) return;
-  e.preventDefault();
   const touch=e.changedTouches[0];
   const t=document.elementFromPoint(touch.clientX, touch.clientY);
   if(t && (t.closest('#pause-btn')||t.closest('#pause-overlay')||
      t.closest('#mute-btn')||t.closest('#settings-btn')||t.closest('#settings-overlay')||
      t.closest('#start-btn')||t.closest('#restart-btn')||t.closest('#go-home-btn')||
      t.closest('#pause-restart-btn')||t.closest('#pause-mute-btn'))) return;
+  e.preventDefault();
   // Map touch → logical canvas coords
   const r=canvas.getBoundingClientRect();
   const lx=(touch.clientX-r.left)/scale;
