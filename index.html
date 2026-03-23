@@ -1317,24 +1317,25 @@
 
   /* ── Pause button — top-right of game area (canvas-wrap), shown only while playing ── */
   #pause-btn {
-    position:absolute;
-    top: 8px;
-    right: max(8px, env(safe-area-inset-right, 8px));
-    z-index:20; pointer-events:all;
-    background:rgba(5,8,20,.85);
-    border:2px solid rgba(0,245,255,.6);
-    color:var(--neon-cyan); font-size:22px;
-    width:72px; height:72px;
+    position:fixed;
+    top: clamp(60px, 10vh, 80px);
+    right: max(10px, env(safe-area-inset-right, 10px));
+    z-index:200; pointer-events:all;
+    background:rgba(5,8,20,.92);
+    border:2.5px solid rgba(0,245,255,.7);
+    color:var(--neon-cyan); font-size:24px;
+    width:clamp(60px,9vw,72px); height:clamp(60px,9vw,72px);
     border-radius:16px; cursor:pointer; display:none;
     align-items:center; justify-content:center;
-    transition:background .2s, box-shadow .2s;
+    transition:background .2s, box-shadow .2s, transform .1s;
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
     font-family:'Orbitron',monospace; font-weight:700;
     -webkit-tap-highlight-color:transparent;
     touch-action:manipulation;
-    box-shadow:0 0 16px rgba(0,245,255,0.3);
+    box-shadow:0 0 20px rgba(0,245,255,0.4), inset 0 0 10px rgba(0,245,255,0.05);
   }
+  #pause-btn:active { transform:scale(0.92); background:rgba(0,245,255,0.15); }
   /* pause-btn transitions — canonical rules defined later in file */
   #pause-btn.visible { display:flex; }
 
@@ -2617,6 +2618,8 @@
 
   <!-- ── HUD LAYER: sits above canvas, does NOT overlap game area ── -->
   <div id="hud-layer">
+    <!-- Pause button — inside hud-layer so it's always above canvas -->
+    <button id="pause-btn" title="Pause (Esc)">⏸</button>
     <!-- XP accent line -->
     
     <!-- ── Main HUD bar ── -->
@@ -2670,8 +2673,6 @@
     <!-- Hidden icon buttons (kept for JS refs) -->
     <button class="icon-btn" id="mute-btn" title="Sound" aria-hidden="true">🔊</button>
 
-    <!-- Pause button — shown only while playing -->
-    <button id="pause-btn" title="Pause (Esc)">⏸</button>
     <!-- ── Pause overlay ── -->
     <div id="pause-overlay">
       <div class="pause-panel">
