@@ -1321,11 +1321,11 @@
     top: 8px;
     right: max(8px, env(safe-area-inset-right, 8px));
     z-index:20; pointer-events:all;
-    background:rgba(5,8,20,.75);
-    border:1.5px solid rgba(0,245,255,.4);
-    color:var(--neon-cyan); font-size:16px;
-    width:56px; height:56px;
-    border-radius:14px; cursor:pointer; display:none;
+    background:rgba(5,8,20,.85);
+    border:2px solid rgba(0,245,255,.6);
+    color:var(--neon-cyan); font-size:22px;
+    width:72px; height:72px;
+    border-radius:16px; cursor:pointer; display:none;
     align-items:center; justify-content:center;
     transition:background .2s, box-shadow .2s;
     backdrop-filter:blur(10px);
@@ -1333,6 +1333,7 @@
     font-family:'Orbitron',monospace; font-weight:700;
     -webkit-tap-highlight-color:transparent;
     touch-action:manipulation;
+    box-shadow:0 0 16px rgba(0,245,255,0.3);
   }
   /* pause-btn transitions — canonical rules defined later in file */
   #pause-btn.visible { display:flex; }
@@ -2556,10 +2557,58 @@
 
   /* Score val — size defined in base .hud-val + #score-val.hud-val rules above */
 
+  /* ── Rotate Device Overlay ── */
+  #rotate-overlay {
+    display:none;
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(3,5,14,0.97);
+    flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:20px;
+  }
+  #rotate-overlay.show { display:flex; }
+
+  .rotate-icon {
+    font-size:72px;
+    animation: rotateAnim 1.5s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes rotateAnim {
+    0%   { transform: rotate(0deg);   }
+    40%  { transform: rotate(-90deg); }
+    60%  { transform: rotate(-90deg); }
+    100% { transform: rotate(0deg);   }
+  }
+  .rotate-title {
+    font-family:'Orbitron',monospace;
+    font-size:clamp(16px,4vw,22px);
+    font-weight:900;
+    color:#00f5ff;
+    text-shadow:0 0 16px rgba(0,245,255,0.7);
+    letter-spacing:3px;
+    text-align:center;
+    padding:0 20px;
+  }
+  .rotate-sub {
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(13px,3vw,16px);
+    color:rgba(255,255,255,0.5);
+    letter-spacing:2px;
+    text-align:center;
+    padding:0 30px;
+  }
+
 </style>
 </head>
 <body>
 <div id="app">
+  <!-- ── Rotate Device Overlay ── -->
+  <div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <div class="rotate-title">ROTATE YOUR DEVICE</div>
+    <div class="rotate-sub">Please rotate to landscape mode for the best experience</div>
+  </div>
+
   <div id="bg-grad"></div>
   <div id="bg-grid"></div>
   <div id="lucky-bg-tint"></div>
@@ -8045,6 +8094,43 @@ if(document.readyState === 'loading'){
 } else {
   _bootGame();
 }
+
+// ── Orientation / Rotate Detector ────────────────────────────────────────────
+(function(){
+  const overlay = document.getElementById('rotate-overlay');
+  let _wasGamePausedByRotate = false;
+
+  function isPortrait(){
+    // Only show on mobile/touch devices
+    if(!('ontouchstart' in window) && navigator.maxTouchPoints === 0) return false;
+    return window.innerHeight > window.innerWidth;
+  }
+
+  function checkOrientation(){
+    if(isPortrait()){
+      overlay.classList.add('show');
+      // Auto pause if game is playing
+      if(typeof state !== 'undefined' && state === STATE.PLAYING){
+        pauseGame();
+        _wasGamePausedByRotate = true;
+      }
+    } else {
+      overlay.classList.remove('show');
+      // Auto resume only if we paused it
+      if(_wasGamePausedByRotate){
+        _wasGamePausedByRotate = false;
+        if(typeof state !== 'undefined' && state === STATE.PAUSED){
+          resumeGame();
+        }
+      }
+    }
+  }
+
+  window.addEventListener('resize', checkOrientation);
+  window.addEventListener('orientationchange', ()=>{ setTimeout(checkOrientation, 200); });
+  // Check on load
+  setTimeout(checkOrientation, 500);
+})();
 
 </script>
 </body>
