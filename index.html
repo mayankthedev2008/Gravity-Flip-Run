@@ -3943,7 +3943,7 @@ const BGM = (function(){
   function _fi(dur){ if(!_mGain||!_ac)return; const t=_ac.currentTime; _mGain.gain.cancelScheduledValues(t); _mGain.gain.setValueAtTime(_mGain.gain.value||0,t); _mGain.gain.linearRampToValueAtTime(1,t+(dur||1)); }
   function _fo(cb,dur){ if(!_mGain||!_ac){if(cb)cb();return;} const t=_ac.currentTime; _mGain.gain.cancelScheduledValues(t); _mGain.gain.setValueAtTime(_mGain.gain.value||0,t); _mGain.gain.linearRampToValueAtTime(0,t+(dur||0.6)); if(cb)setTimeout(cb,(dur||0.6)*1000+50); }
 
-  const _homeTracks = ['https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM1.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM2.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM3.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM4.mp3'];
+  const _homeTracks = ['https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM1.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM2.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM3.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM4.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM5.mp3', 'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/HSM6.mp3'];
   let _currentTrackIndex = Math.floor(Math.random() * _homeTracks.length);
 
   function _playHomeTrack(index){
@@ -4016,7 +4016,9 @@ const BGM = (function(){
     'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM1.mp3',
     'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM2.mp3',
     'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM3.mp3',
-    'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM4.mp3'
+    'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM4.mp3',
+    'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM5.mp3',
+    'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM6.mp3'
   ];
 
   let _lastGameTrackIndex = -1;
