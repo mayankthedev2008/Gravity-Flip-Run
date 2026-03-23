@@ -3994,20 +3994,26 @@ const BGM = (function(){
 
     // Play random game track
     try {
-      const randomTrack = _gameTracks[Math.floor(Math.random() * _gameTracks.length)];
-      _gameAudio = new Audio(randomTrack);
-      _gameAudio.loop = true;
-      _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
-      const playPromise = _gameAudio.play();
-      if(playPromise !== undefined){
-        playPromise.catch(()=>{
-          const retry = () => {
-            if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
-            document.removeEventListener('pointerdown', retry);
-          };
-          document.addEventListener('pointerdown', retry, {once:true});
-        });
-      }
+      const _playNextGameTrack = () => {
+        if(!_isGame || !musicEnabled || muted) return;
+        if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} }
+        const randomTrack = _gameTracks[Math.floor(Math.random() * _gameTracks.length)];
+        _gameAudio = new Audio(randomTrack);
+        _gameAudio.loop = false;
+        _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
+        _gameAudio.onended = () => { if(_isGame) _playNextGameTrack(); };
+        const playPromise = _gameAudio.play();
+        if(playPromise !== undefined){
+          playPromise.catch(()=>{
+            const retry = () => {
+              if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
+              document.removeEventListener('pointerdown', retry);
+            };
+            document.addEventListener('pointerdown', retry, {once:true});
+          });
+        }
+      };
+      _playNextGameTrack();
     } catch(e) {}
   }
 
