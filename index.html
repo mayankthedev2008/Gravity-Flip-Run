@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1371,14 +1371,16 @@
     background:linear-gradient(160deg,rgba(5,10,28,.97) 0%,rgba(3,7,18,.98) 100%);
     border:1px solid rgba(0,245,255,.2);
     border-top:2px solid rgba(0,245,255,.5);
-    border-radius:24px;
-    padding:clamp(20px,3.5vh,34px) clamp(24px,5vw,48px);
-    min-width:clamp(280px,72vw,420px);
-    max-width:94vw;
+    border-radius:20px;
+    padding:clamp(12px,2vh,22px) clamp(16px,4vw,36px);
+    min-width:clamp(240px,70vw,380px);
+    max-width:92vw;
+    max-height:88vh;
+    max-height:88dvh;
+    overflow-y:auto;
     box-shadow:
       0 0 0 1px rgba(0,245,255,.06),
       0 0 60px rgba(0,245,255,.1),
-      0 0 120px rgba(0,245,255,.04),
       0 20px 70px rgba(0,0,0,.9),
       inset 0 1px 0 rgba(255,255,255,.06);
     display:flex; flex-direction:column; align-items:center;
@@ -1514,11 +1516,11 @@
     border:1px solid rgba(255,0,110,.2);
     border-top:2px solid rgba(255,0,110,.6);
     border-radius:16px;
-    padding:clamp(10px,1.5vh,18px) clamp(20px,5vw,40px);
-    max-width:min(520px,96vw);
+    padding:clamp(8px,1.2vh,14px) clamp(14px,4vw,30px);
+    max-width:min(480px,94vw);
     width:100%;
-    max-height:85vh;
-    max-height:85dvh;
+    max-height:88vh;
+    max-height:88dvh;
     overflow-y:auto; overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
     box-shadow:
@@ -6423,11 +6425,13 @@ function showPauseOverlay(){
   document.getElementById('pause-best-val').textContent  = Math.max(G.score, PROG.best);
   document.getElementById('pause-coins-val').textContent = fmtCoins(G.sessionCoins);
   pauseOverlay.classList.add('visible');
+  pauseBtn.classList.remove('visible'); // hide pause button when menu is open
   // ── CrazyGames SDK — gameplay paused ──
   try{ if(window.CrazyGames && CrazyGames.SDK) CrazyGames.SDK.game.gameplayStop(); }catch(e){}
 }
 function hidePauseOverlay(){
   pauseOverlay.classList.remove('visible');
+  if(state === STATE.PAUSED) pauseBtn.classList.add('visible'); // show again on resume
 }
 
 function pauseGame(){
