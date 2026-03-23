@@ -4019,19 +4019,29 @@ const BGM = (function(){
     'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM4.mp3'
   ];
 
+  let _lastGameTrackIndex = -1;
+
   function _playNextGameTrack(){
     if(!_isGame || !musicEnabled || muted) return;
     if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
-    const randomTrack = _gameTracks[Math.floor(Math.random() * _gameTracks.length)];
-    _gameAudio = new Audio(randomTrack);
-    _gameAudio.loop = false;
-    _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
-    _gameAudio.onended = () => { if(_isGame) _playNextGameTrack(); };
-    const playPromise = _gameAudio.play();
-    if(playPromise !== undefined){
-      playPromise.catch(()=>{
+
+    // Pick a different track than last one
+    let idx;
+    do { idx = Math.floor(Math.random() * _gameTracks.length); }
+    while(_gameTracks.length > 1 && idx === _lastGameTrackIndex);
+    _lastGameTrackIndex = idx;
+
+    const audio = new Audio(_gameTracks[idx]);
+    _gameAudio = audio;
+    audio.loop = false;
+    audio.volume = Math.min(1, sfxVolume * 0.8);
+    audio.onended = () => { if(_isGame && _gameAudio === audio) _playNextGameTrack(); };
+    audio.onerror = () => { if(_isGame && _gameAudio === audio) setTimeout(_playNextGameTrack, 1000); };
+    const p = audio.play();
+    if(p !== undefined){
+      p.catch(()=>{
         const retry = () => {
-          if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
+          if(_gameAudio === audio && _isGame) audio.play().catch(()=>{});
           document.removeEventListener('pointerdown', retry);
         };
         document.addEventListener('pointerdown', retry, {once:true});
