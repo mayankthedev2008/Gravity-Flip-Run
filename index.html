@@ -2814,6 +2814,25 @@
           onmousedown="this.style.transform='scale(0.92)'"
           onmouseup="this.style.transform='scale(1)'"
         >⏮</button>
+        <button id="track-playpause-btn" onclick="BGM.toggleHomePlayPause()" title="Play/Pause"
+          style="
+            background:rgba(0,245,255,0.08);
+            border:1.5px solid rgba(0,245,255,0.35);
+            border-radius:50%;
+            width:clamp(42px,5.5vw,54px);
+            height:clamp(42px,5.5vw,54px);
+            display:flex;align-items:center;justify-content:center;
+            cursor:pointer;
+            color:#00f5ff;
+            font-size:clamp(18px,2.5vw,22px);
+            box-shadow:0 0 14px rgba(0,245,255,0.18);
+            transition:background 0.2s, box-shadow 0.2s, transform 0.15s;
+          "
+          onmouseover="this.style.background='rgba(0,245,255,0.18)';this.style.boxShadow='0 0 22px rgba(0,245,255,0.38)'"
+          onmouseout="this.style.background='rgba(0,245,255,0.08)';this.style.boxShadow='0 0 14px rgba(0,245,255,0.18)'"
+          onmousedown="this.style.transform='scale(0.92)'"
+          onmouseup="this.style.transform='scale(1)'"
+        >⏸</button>
         <button id="track-switch-btn" onclick="BGM.nextHomeTrack()" title="Next Track"
           style="
             background:rgba(0,245,255,0.08);
@@ -3960,6 +3979,26 @@ const BGM = (function(){
     _playHomeTrack(_currentTrackIndex - 1);
   }
 
+  function toggleHomePlayPause(){
+    const btn = document.getElementById('track-playpause-btn');
+    if(!_homeAudio) return;
+    if(_homeAudio.paused){
+      _homeAudio.play().catch(()=>{});
+      if(btn) btn.textContent = '⏸';
+    } else {
+      _homeAudio.pause();
+      if(btn) btn.textContent = '▶';
+    }
+  }
+
+  function pauseGameMusic(){
+    if(_gameAudio && !_gameAudio.paused) _gameAudio.pause();
+  }
+
+  function resumeGameMusic(){
+    if(_gameAudio && _gameAudio.paused && _isGame && musicEnabled && !muted) _gameAudio.play().catch(()=>{});
+  }
+
   function startHome(){
     _run=false; clearTimeout(_sid);
     _isGame=false; _step=0; _bar=0; _bpm=H_BPM; _tbpm=H_BPM; _slow=false;
@@ -3980,6 +4019,26 @@ const BGM = (function(){
     'https://raw.githubusercontent.com/mayankthedev2008/Gravity-Flip-Run/main/GSM4.mp3'
   ];
 
+  function _playNextGameTrack(){
+    if(!_isGame || !musicEnabled || muted) return;
+    if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
+    const randomTrack = _gameTracks[Math.floor(Math.random() * _gameTracks.length)];
+    _gameAudio = new Audio(randomTrack);
+    _gameAudio.loop = false;
+    _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
+    _gameAudio.onended = () => { if(_isGame) _playNextGameTrack(); };
+    const playPromise = _gameAudio.play();
+    if(playPromise !== undefined){
+      playPromise.catch(()=>{
+        const retry = () => {
+          if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
+          document.removeEventListener('pointerdown', retry);
+        };
+        document.addEventListener('pointerdown', retry, {once:true});
+      });
+    }
+  }
+
   function startGame(){
     // Stop MP3 home music first
     if(_homeAudio){ try{ _homeAudio.pause(); _homeAudio.currentTime=0; }catch(e){} _homeAudio=null; }
@@ -3990,31 +4049,10 @@ const BGM = (function(){
     if(!musicEnabled||muted) return;
 
     // Stop any existing game audio
-    if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} }
+    if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
 
-    // Play random game track
-    try {
-      const _playNextGameTrack = () => {
-        if(!_isGame || !musicEnabled || muted) return;
-        if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} }
-        const randomTrack = _gameTracks[Math.floor(Math.random() * _gameTracks.length)];
-        _gameAudio = new Audio(randomTrack);
-        _gameAudio.loop = false;
-        _gameAudio.volume = Math.min(1, sfxVolume * 0.8);
-        _gameAudio.onended = () => { if(_isGame) _playNextGameTrack(); };
-        const playPromise = _gameAudio.play();
-        if(playPromise !== undefined){
-          playPromise.catch(()=>{
-            const retry = () => {
-              if(_gameAudio && _isGame) _gameAudio.play().catch(()=>{});
-              document.removeEventListener('pointerdown', retry);
-            };
-            document.addEventListener('pointerdown', retry, {once:true});
-          });
-        }
-      };
-      _playNextGameTrack();
-    } catch(e) {}
+    // Play first random game track
+    _playNextGameTrack();
   }
 
   function stop(){ _run=false; clearTimeout(_sid); _slow=false; _fo(); if(_homeAudio){ try{ _homeAudio.pause(); _homeAudio.currentTime=0; }catch(e){} _homeAudio=null; } if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; } }
@@ -4048,7 +4086,7 @@ const BGM = (function(){
 
   function start(){ startHome(); }
   function setEnabled(v){ musicEnabled=v; if(v) startHome(); else stop(); }
-  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
+  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, toggleHomePlayPause, pauseGameMusic, resumeGameMusic, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
 })();
 
 // ─── Confetti system ─────────────────────────────────────────────────────────
@@ -6317,14 +6355,14 @@ function hidePauseOverlay(){
 function pauseGame(){
   if(state !== STATE.PLAYING) return;
   state = STATE.PAUSED;
+  BGM.pauseGameMusic();
   showPauseOverlay();
 }
 function resumeGame(){
   if(state !== STATE.PAUSED) return;
   hidePauseOverlay();
-  // lastTime is being updated every RAF frame (even while paused) so the
-  // very first dt after resuming will be negligibly small — no physics spike.
   state = STATE.PLAYING;
+  BGM.resumeGameMusic();
   // ── CrazyGames SDK — gameplay resumed ──
   try{ if(window.CrazyGames && CrazyGames.SDK) CrazyGames.SDK.game.gameplayStart(); }catch(e){}
 }
