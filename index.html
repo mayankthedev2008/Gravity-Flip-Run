@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -375,8 +375,8 @@
     border-top:1px solid rgba(0,245,255,.40);
     border-radius:22px;
     padding:clamp(20px,4vw,34px) clamp(18px,4vw,36px);
-    width:clamp(300px,90vw,480px);
-    max-height:90vh; overflow-y:auto;
+    width:clamp(300px,94vw,480px);
+    max-height:92vh; overflow-y:auto;
     box-shadow:0 0 80px rgba(0,245,255,.08), 0 30px 80px rgba(0,0,0,.8);
     display:flex; flex-direction:column; gap:16px;
   }
@@ -385,18 +385,20 @@
     border-bottom:1px solid rgba(0,245,255,.14); padding-bottom:12px;
   }
   .settings-title {
-    font-family:'Orbitron',monospace; font-size:clamp(15px,3vw,20px);
+    font-family:'Orbitron',monospace; font-size:clamp(16px,3.5vw,22px);
     font-weight:900; letter-spacing:3px; color:#00f5ff;
     text-shadow:0 0 20px rgba(0,245,255,.7);
   }
   .settings-close-btn {
-    background:none; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.7);
-    border-radius:8px; padding:5px 10px; cursor:pointer; font-size:16px;
-    transition:all .15s;
+    background:none; border:1.5px solid rgba(255,255,255,.3); color:rgba(255,255,255,.8);
+    border-radius:10px; padding:clamp(6px,1.2vh,10px) clamp(12px,2vw,16px);
+    cursor:pointer; font-size:clamp(16px,3vw,20px);
+    transition:all .15s; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
-  .settings-close-btn:hover { color:#fff; border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.08); }
+  .settings-close-btn:hover { color:#fff; border-color:rgba(255,255,255,.6); background:rgba(255,255,255,.1); }
   .settings-section-label {
-    font-family:'Rajdhani',sans-serif; font-size:10px;
+    font-family:'Rajdhani',sans-serif; font-size:clamp(11px,2vw,13px);
     letter-spacing:4px; color:rgba(0,245,255,.55);
     font-weight:700; text-transform:uppercase;
     padding-bottom:6px;
@@ -406,7 +408,7 @@
   .settings-controls-body { display:flex; flex-direction:column; gap:8px; }
   .settings-row {
     display:flex; align-items:center; justify-content:space-between;
-    padding:10px 16px;
+    padding:clamp(12px,2vh,16px) clamp(14px,3vw,20px);
     background:rgba(255,255,255,.035);
     border:1px solid rgba(255,255,255,.08);
     border-radius:12px;
@@ -414,30 +416,19 @@
   }
   .settings-row:hover { border-color:rgba(0,245,255,.18); }
   .settings-action-name {
-    font-family:'Rajdhani',sans-serif; font-size:clamp(12px,2vw,14px);
+    font-family:'Rajdhani',sans-serif; font-size:clamp(14px,2.5vw,16px);
     color:rgba(255,255,255,.85); font-weight:600; letter-spacing:1px;
   }
   .settings-key-btn {
-    min-width:80px; padding:6px 14px;
+    min-width:clamp(70px,14vw,90px); padding:clamp(8px,1.5vh,10px) clamp(12px,2.5vw,16px);
     background:rgba(0,245,255,.1);
     border:1.5px solid rgba(0,245,255,.4);
     border-radius:8px; color:#00f5ff;
-    font-family:'Orbitron',monospace; font-size:clamp(10px,1.8vw,13px);
+    font-family:'Orbitron',monospace; font-size:clamp(12px,2vw,14px);
     font-weight:700; letter-spacing:1px;
     cursor:pointer; transition:all .15s;
     text-align:center;
   }
-  .settings-key-btn:hover { background:rgba(0,245,255,.2); border-color:rgba(0,245,255,.7); }
-  .settings-key-btn.listening {
-    background:rgba(255,215,0,.15);
-    border-color:rgba(255,215,0,.8);
-    color:#ffd700;
-    animation:keyListenPulse .7s ease-in-out infinite alternate;
-  }
-  /* keyListenPulse — canonical version defined later in file */
-  .settings-footer {
-    display:flex; gap:10px; justify-content:flex-end;
-    border-top:1px solid rgba(255,255,255,.08); padding-top:14px;
     flex-wrap:wrap;
   }
   .settings-reset-btn {
@@ -2576,7 +2567,72 @@
 
   /* Score val — size defined in base .hud-val + #score-val.hud-val rules above */
 
-  /* ── Rotate Device Overlay ── */
+  /* ── Game Music Bar — Spotify style ── */
+  #game-music-bar {
+    position:fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    z-index: 199;
+    pointer-events: all;
+    padding: 0 clamp(10px,3vw,20px) clamp(8px,1.5vh,12px);
+  }
+  #game-music-bar-inner {
+    background: rgba(5,8,20,0.92);
+    border: 1px solid rgba(0,245,255,0.2);
+    border-radius: 14px;
+    padding: clamp(8px,1.5vh,12px) clamp(14px,3vw,20px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 0 20px rgba(0,245,255,0.1), 0 -4px 20px rgba(0,0,0,0.5);
+  }
+  #gm-track-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(11px,2vw,14px);
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #gm-controls {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px,2vw,14px);
+    flex-shrink: 0;
+  }
+  #gm-controls button {
+    background: rgba(0,245,255,0.08);
+    border: 1.5px solid rgba(0,245,255,0.3);
+    border-radius: 50%;
+    color: #00f5ff;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  #gm-prev, #gm-next {
+    width: clamp(32px,5vw,40px);
+    height: clamp(32px,5vw,40px);
+    font-size: clamp(13px,2.2vw,16px);
+  }
+  #gm-playpause {
+    width: clamp(38px,6vw,46px);
+    height: clamp(38px,6vw,46px);
+    font-size: clamp(15px,2.5vw,18px);
+    background: rgba(0,245,255,0.15);
+    border-color: rgba(0,245,255,0.5);
+    box-shadow: 0 0 12px rgba(0,245,255,0.2);
+  }
+  #gm-controls button:active { transform: scale(0.88); }
+
+</style>
   #rotate-overlay {
     display:none;
     position:fixed; inset:0; z-index:9999;
@@ -2671,6 +2727,18 @@
         <div class="hud-best-row">
           <span class="hud-lbl" style="margin-right:4px">★ BEST</span>
           <span class="hud-val pink hud-best-val" id="best-val">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Music Player Bar — bottom of screen ── -->
+    <div id="game-music-bar" style="display:none;">
+      <div id="game-music-bar-inner">
+        <div id="gm-track-name">♪ Loading...</div>
+        <div id="gm-controls">
+          <button id="gm-prev" onclick="BGM.prevGameTrack()" title="Previous">⏮</button>
+          <button id="gm-playpause" onclick="BGM.toggleGamePlayPause()" title="Play/Pause">⏸</button>
+          <button id="gm-next" onclick="BGM.nextGameTrack()" title="Next">⏭</button>
         </div>
       </div>
     </div>
@@ -3005,8 +3073,8 @@
       <div class="settings-row" style="margin-top:6px;">
         <span class="settings-action-name">🎵 Music</span>
         <button id="music-toggle-btn" style="
-          font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:2px;
-          padding:7px 18px;border-radius:8px;cursor:pointer;
+          font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
+          padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
           border:1.5px solid rgba(191,0,255,.4);
           background:rgba(191,0,255,.1);color:#bf00ff;
           transition:all .18s ease;">ON</button>
@@ -3015,8 +3083,8 @@
       <div class="settings-row">
         <span class="settings-action-name">Cinematic Effects</span>
         <button id="cinematic-toggle-btn" style="
-          font-family:Orbitron,monospace;font-size:11px;font-weight:700;letter-spacing:2px;
-          padding:7px 18px;border-radius:8px;cursor:pointer;
+          font-family:Orbitron,monospace;font-size:clamp(12px,2vw,14px);font-weight:700;letter-spacing:2px;
+          padding:clamp(10px,1.8vh,13px) clamp(20px,4vw,26px);border-radius:10px;cursor:pointer;
           border:1.5px solid rgba(0,245,255,.4);
           background:rgba(0,245,255,.1);color:#00f5ff;
           transition:all .18s ease;
@@ -3044,12 +3112,33 @@
         </div>
         <div id="redeem-msg" style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
           letter-spacing:1px;min-height:18px;text-align:center;font-weight:700;"></div>
+
+        <!-- Instagram hint -->
+        <div style="
+          margin-top:6px;
+          background:rgba(255,0,110,0.06);
+          border:1px solid rgba(255,0,110,0.25);
+          border-radius:10px;
+          padding:10px 14px;
+          text-align:center;
+        ">
+          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);
+            color:rgba(255,255,255,0.55);letter-spacing:1.5px;margin-bottom:5px;">
+            🎁 WANT FREE COINS?
+          </div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,1.8vw,13px);
+            font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1px;line-height:1.6;">
+            Go to <span style="color:#00f5ff;">CREDITS</span> &amp; Follow us on
+            <span style="color:#ff006e;text-shadow:0 0 8px rgba(255,0,110,0.6);">Instagram</span>
+            to get Redeem Codes! 🚀
+          </div>
+        </div>
       </div>
 
-      <div class="settings-footer">
-        <button class="neon-btn settings-reset-btn" id="settings-reset-btn">↺ RESET CONTROLS</button>
-        <button class="neon-btn" id="settings-fullreset-btn" style="font-size:clamp(10px,1.8vw,12px);padding:8px 16px;background:rgba(255,0,60,.1);border-color:rgba(255,0,60,.45);color:rgba(255,80,80,.9);">🗑 RESET GAME</button>
-        <button class="neon-btn settings-back-btn" id="settings-back-btn">← BACK</button>
+      <div class="settings-footer" style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(255,255,255,.08);padding-top:14px;">
+        <button class="neon-btn settings-back-btn" id="settings-back-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);">← BACK</button>
+        <button class="neon-btn settings-reset-btn" id="settings-reset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);">↺ RESET CONTROLS</button>
+        <button class="neon-btn" id="settings-fullreset-btn" style="width:100%;font-size:clamp(12px,2vw,14px);padding:clamp(12px,2vh,16px);background:rgba(255,0,60,.1);border-color:rgba(255,0,60,.45);color:rgba(255,80,80,.9);">🗑 RESET GAME</button>
       </div>
       <div class="settings-hint">Click a key button, then press any key to rebind. ESC to cancel.</div>
     </div>
@@ -3092,7 +3181,7 @@
         border-radius:14px;
         text-decoration:none;
         transition:background .2s,border-color .2s,transform .18s cubic-bezier(.34,1.56,.64,1);
-        margin-bottom:10px;
+        margin-bottom:24px;
       " onmouseover="this.style.background='rgba(131,58,180,.12)';this.style.borderColor='rgba(252,176,69,.3)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,.03)';this.style.borderColor='rgba(255,255,255,.08)';this.style.transform='translateY(0)'">
         <!-- Instagram icon -->
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#833ab4 0%,#fd1d1d 50%,#fcb045 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(131,58,180,.4);">
@@ -3101,27 +3190,6 @@
         <div style="flex:1;text-align:left;">
           <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(13px,2.2vw,15px);font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.9);">Follow on Instagram</div>
           <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px;">@mayank_862008</div>
-        </div>
-        <div style="font-size:13px;color:rgba(255,255,255,.2);">›</div>
-      </a>
-
-      <!-- Feedback link (same target) -->
-      <a href="https://www.instagram.com/mayank_862008?igsh=MWMzMmI0dXZkNmJndw==" target="_blank" rel="noopener noreferrer" style="
-        display:flex;align-items:center;gap:14px;
-        width:100%;padding:16px 20px;
-        background:rgba(255,255,255,.03);
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:14px;
-        text-decoration:none;
-        transition:background .2s,border-color .2s,transform .18s cubic-bezier(.34,1.56,.64,1);
-        margin-bottom:28px;
-      " onmouseover="this.style.background='rgba(0,245,255,.06)';this.style.borderColor='rgba(0,245,255,.2)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,.03)';this.style.borderColor='rgba(255,255,255,.08)';this.style.transform='translateY(0)'">
-        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#00f5ff" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </div>
-        <div style="flex:1;text-align:left;">
-          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(13px,2.2vw,15px);font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.9);">Send Feedback</div>
-          <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px;">DM on Instagram</div>
         </div>
         <div style="font-size:13px;color:rgba(255,255,255,.2);">›</div>
       </a>
@@ -4074,6 +4142,10 @@ const BGM = (function(){
     // Stop game audio
     if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
 
+    // Hide game music bar
+    const bar = document.getElementById('game-music-bar');
+    if(bar) bar.style.display = 'none';
+
     if(!musicEnabled||muted) return;
 
     // Pick random track and play
@@ -4090,6 +4162,21 @@ const BGM = (function(){
   ];
 
   let _lastGameTrackIndex = -1;
+  let _currentGameTrackIndex = -1;
+
+  function _getTrackName(url){
+    const name = url.split('/').pop().replace('.mp3','');
+    return '♪ ' + name;
+  }
+
+  function _updateGameBar(playing){
+    const bar = document.getElementById('game-music-bar');
+    const btn = document.getElementById('gm-playpause');
+    const nameEl = document.getElementById('gm-track-name');
+    if(bar) bar.style.display = 'block';
+    if(btn) btn.textContent = playing ? '⏸' : '▶';
+    if(nameEl && _currentGameTrackIndex >= 0) nameEl.textContent = _getTrackName(_gameTracks[_currentGameTrackIndex]);
+  }
 
   function _playNextGameTrack(){
     if(!_isGame || !musicEnabled || muted) return;
@@ -4100,6 +4187,7 @@ const BGM = (function(){
     do { idx = Math.floor(Math.random() * _gameTracks.length); }
     while(_gameTracks.length > 1 && idx === _lastGameTrackIndex);
     _lastGameTrackIndex = idx;
+    _currentGameTrackIndex = idx;
 
     const audio = new Audio(_gameTracks[idx]);
     _gameAudio = audio;
@@ -4108,14 +4196,53 @@ const BGM = (function(){
     audio.onended = () => { if(_isGame && _gameAudio === audio) _playNextGameTrack(); };
     audio.onerror = () => { if(_isGame && _gameAudio === audio) setTimeout(_playNextGameTrack, 1000); };
     const p = audio.play();
+    _updateGameBar(true);
     if(p !== undefined){
       p.catch(()=>{
+        _updateGameBar(false);
         const retry = () => {
-          if(_gameAudio === audio && _isGame) audio.play().catch(()=>{});
+          if(_gameAudio === audio && _isGame){ audio.play().catch(()=>{}); _updateGameBar(true); }
           document.removeEventListener('pointerdown', retry);
         };
         document.addEventListener('pointerdown', retry, {once:true});
       });
+    }
+  }
+
+  function _playGameTrackAt(idx){
+    _lastGameTrackIndex = idx;
+    _currentGameTrackIndex = idx;
+    if(_gameAudio){ try{ _gameAudio.pause(); _gameAudio.currentTime=0; }catch(e){} _gameAudio=null; }
+    if(!_isGame || !musicEnabled || muted) return;
+    const audio = new Audio(_gameTracks[idx]);
+    _gameAudio = audio;
+    audio.loop = false;
+    audio.volume = Math.min(1, sfxVolume * 0.8);
+    audio.onended = () => { if(_isGame && _gameAudio === audio) _playNextGameTrack(); };
+    audio.onerror = () => { if(_isGame && _gameAudio === audio) setTimeout(_playNextGameTrack, 1000); };
+    audio.play().catch(()=>{ _updateGameBar(false); });
+    _updateGameBar(true);
+  }
+
+  function nextGameTrack(){
+    const idx = (_currentGameTrackIndex + 1) % _gameTracks.length;
+    _playGameTrackAt(idx);
+  }
+
+  function prevGameTrack(){
+    const idx = ((_currentGameTrackIndex - 1) + _gameTracks.length) % _gameTracks.length;
+    _playGameTrackAt(idx);
+  }
+
+  function toggleGamePlayPause(){
+    if(!_gameAudio) return;
+    const btn = document.getElementById('gm-playpause');
+    if(_gameAudio.paused){
+      _gameAudio.play().catch(()=>{});
+      if(btn) btn.textContent = '⏸';
+    } else {
+      _gameAudio.pause();
+      if(btn) btn.textContent = '▶';
     }
   }
 
@@ -4166,7 +4293,7 @@ const BGM = (function(){
 
   function start(){ startHome(); }
   function setEnabled(v){ musicEnabled=v; if(v) startHome(); else stop(); }
-  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, toggleHomePlayPause, pauseGameMusic, resumeGameMusic, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
+  return { start, startHome, startGame, stop, setEnabled, updateSpeed, slowMoOn, slowMoOff, nextHomeTrack, prevHomeTrack, toggleHomePlayPause, pauseGameMusic, resumeGameMusic, nextGameTrack, prevGameTrack, toggleGamePlayPause, get _homeAudio(){ return _homeAudio; }, get _gameAudio(){ return _gameAudio; } };
 })();
 
 // ─── Confetti system ─────────────────────────────────────────────────────────
@@ -6771,7 +6898,8 @@ document.getElementById('app').addEventListener('touchstart',function(e){
   if(t && (t.closest('#pause-btn')||t.closest('#pause-overlay')||
      t.closest('#mute-btn')||t.closest('#settings-btn')||t.closest('#settings-overlay')||
      t.closest('#start-btn')||t.closest('#restart-btn')||t.closest('#go-home-btn')||
-     t.closest('#pause-restart-btn')||t.closest('#pause-mute-btn'))) return;
+     t.closest('#pause-restart-btn')||t.closest('#pause-mute-btn')||
+     t.closest('#game-music-bar'))) return;
   e.preventDefault();
   // Map touch → logical canvas coords
   const r=canvas.getBoundingClientRect();
