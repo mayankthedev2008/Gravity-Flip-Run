@@ -1650,7 +1650,7 @@
     transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s,border-color .2s,box-shadow .2s;
     -webkit-tap-highlight-color:transparent;
     user-select:none; pointer-events:auto;
-    min-height:clamp(34px,5.5dvh,52px);
+    min-height:clamp(28px,4dvh,40px);
     animation:secBtnGlow 3s ease-in-out infinite;
   }
   .home-sec-btn:hover { transform:scale(1.06) translateY(-2px); background:rgba(0,245,255,.12); border-color:rgba(0,245,255,.5); box-shadow:0 0 20px rgba(0,245,255,.25); }
@@ -1662,7 +1662,7 @@
   /* ── Hint ── */
   .home-hint {
     position:relative; z-index:2; flex-shrink:0;
-    font-size:clamp(7px, 1vw, 11px);
+    font-size:clamp(12px, 1.8vw, 18px);
     letter-spacing:2px; color:rgba(0,245,255,.4);
     text-align:center;
     font-family:'Rajdhani',sans-serif; font-weight:700;
@@ -1682,18 +1682,26 @@
     .hsc-val       { font-size:12px; }
     .home-play-btn { width:min(90vw,260px); }
     .home-sec-btn  { padding:6px 10px; font-size:9px; min-height:32px; }
-    .home-hint     { font-size:7px; letter-spacing:1px; }
+    .home-hint     { font-size:11px; letter-spacing:1px; }
   }
 
   /* ── Very small phones ── */
   @media (max-width:360px), (max-height:600px) {
-    .home-eyebrow { display:none; }
-    .home-tagline { display:none; }
-    .home-hint    { display:none; }
+    .home-eyebrow { display:block; font-size:9px; letter-spacing:2px; }
+    .home-tagline { display:block; font-size:9px; letter-spacing:2px; }
+    .home-hint    { display:block; font-size:9px; letter-spacing:1px; }
     .home-stat-card{ padding:4px 3px; }
     .hsc-icon     { font-size:11px; }
     .hsc-val      { font-size:11px; }
     .home-sec-btn { padding:5px 8px; font-size:8px; min-height:28px; }
+  }
+
+  /* ── Landscape mobile (short height) ── */
+  @media (max-height:500px) and (orientation:landscape) {
+    .home-eyebrow { display:block !important; font-size:8px; letter-spacing:2px; margin-bottom:1px; }
+    .home-tagline { display:block !important; font-size:8px; letter-spacing:2px; margin-top:1px; }
+    .home-hint    { display:block !important; font-size:8px; letter-spacing:1px; }
+    .home-content { gap:2px; }
   }
 
   /* ─────────────────── CINEMA MODULE CSS ─────────────────── */
@@ -3079,25 +3087,25 @@
         <div style="
           display:grid;
           grid-template-columns:1fr 1fr;
-          gap:clamp(5px,1dvh,10px);
+          gap:clamp(10px,2dvh,18px);
           width:min(92vw,380px);
           flex-shrink:0;
         ">
-          <button class="home-sec-btn" id="store-btn" style="justify-content:center;gap:5px;padding:clamp(6px,1dvh,11px);">
-            <span style="font-size:clamp(13px,2.5vw,17px);">🛒</span>
-            <span style="font-size:clamp(9px,1.8vw,12px);letter-spacing:1.5px;">STORE</span>
+          <button class="home-sec-btn" id="store-btn" style="justify-content:center;gap:4px;padding:clamp(4px,0.7dvh,7px) clamp(6px,1.2vw,12px);">
+            <span style="font-size:clamp(11px,2vw,14px);">🛒</span>
+            <span style="font-size:clamp(8px,1.4vw,10px);letter-spacing:1.5px;">STORE</span>
           </button>
-          <button class="home-sec-btn" id="howto-btn" style="justify-content:center;gap:5px;padding:clamp(6px,1dvh,11px);">
-            <span style="font-size:clamp(13px,2.5vw,17px);">❓</span>
-            <span style="font-size:clamp(9px,1.8vw,12px);letter-spacing:1.5px;">HOW TO PLAY</span>
+          <button class="home-sec-btn" id="howto-btn" style="justify-content:center;gap:4px;padding:clamp(4px,0.7dvh,7px) clamp(6px,1.2vw,12px);">
+            <span style="font-size:clamp(11px,2vw,14px);">❓</span>
+            <span style="font-size:clamp(8px,1.4vw,10px);letter-spacing:1.5px;">HOW TO PLAY</span>
           </button>
-          <button class="home-sec-btn" id="settings-btn" style="justify-content:center;gap:5px;padding:clamp(6px,1dvh,11px);">
-            <span style="font-size:clamp(13px,2.5vw,17px);">⚙</span>
-            <span style="font-size:clamp(9px,1.8vw,12px);letter-spacing:1.5px;">SETTINGS</span>
+          <button class="home-sec-btn" id="settings-btn" style="justify-content:center;gap:4px;padding:clamp(4px,0.7dvh,7px) clamp(6px,1.2vw,12px);">
+            <span style="font-size:clamp(11px,2vw,14px);">⚙</span>
+            <span style="font-size:clamp(8px,1.4vw,10px);letter-spacing:1.5px;">SETTINGS</span>
           </button>
-          <button class="home-sec-btn" id="credits-btn" style="justify-content:center;gap:5px;padding:clamp(6px,1dvh,11px);">
-            <span style="font-size:clamp(13px,2.5vw,17px);">⭐</span>
-            <span style="font-size:clamp(9px,1.8vw,12px);letter-spacing:1.5px;">CREDITS</span>
+          <button class="home-sec-btn" id="credits-btn" style="justify-content:center;gap:4px;padding:clamp(4px,0.7dvh,7px) clamp(6px,1.2vw,12px);">
+            <span style="font-size:clamp(11px,2vw,14px);">⭐</span>
+            <span style="font-size:clamp(8px,1.4vw,10px);letter-spacing:1.5px;">CREDITS</span>
           </button>
         </div>
 
