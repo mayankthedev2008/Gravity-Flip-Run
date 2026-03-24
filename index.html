@@ -539,62 +539,13 @@
   }
   /* ── Home content center wrapper ── */
   /* LAYER 2 — menu content, sits above background layers */
-  .home-content {
-    position:absolute;
-    inset:0;
-    z-index:2;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:clamp(5px,1.2dvh,14px);
-    overflow:hidden;
-    padding:clamp(4px,1dvh,10px) clamp(8px,2vw,16px);
-    box-sizing:border-box;
-    scrollbar-width:none;
-    pointer-events:none;
-  }
+  /* home-content, title, tagline, eyebrow defined in responsive section below */
   .home-content::-webkit-scrollbar { display:none; }
-  /* re-enable pointer events on interactive children */
-  .home-content > * { pointer-events:auto; }
-  .home-content::-webkit-scrollbar { display:none; }
-
-  .home-title-block {
-    position:relative; z-index:2;
-    text-align:center;
-    flex-shrink:0;
-    animation:titleBlockFloat 4s ease-in-out infinite alternate;
-  }
   @keyframes titleBlockFloat {
     from { transform:translateY(0px); }
     to   { transform:translateY(-6px); }
   }
-  .home-eyebrow {
-    font-family:'Rajdhani',sans-serif;
-    font-size:clamp(8px,1.3vw,11px);
-    font-weight:700; letter-spacing:4px;
-    color:rgba(0,245,255,.5);
-    text-transform:uppercase;
-    margin-bottom:3px;
-  }
-  .home-title {
-    margin:0; padding:0; border:none;
-    font-family:'Orbitron',monospace;
-    font-weight:900; line-height:0.92;
-    display:flex; flex-direction:column; align-items:center;
-    gap:1px;
-  }
-  .home-title-l1 {
-    display:block;
-    font-size:clamp(20px,min(8vw,7dvh),72px);
-    letter-spacing:clamp(2px,1.2vw,8px);
-    background:linear-gradient(135deg, #00f5ff 0%, #ffffff 40%, #00f5ff 70%, #bf00ff 100%);
-    -webkit-background-clip:text; background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 18px rgba(0,245,255,.7));
-    animation:titleShimmer 4s linear infinite;
-    background-size:200% 100%;
-  }
+  /* eyebrow, title-l1, title-l2, tagline defined in responsive section below */
   @keyframes titleShimmer {
     0%   { background-position:0% 0%; }
     100% { background-position:200% 0%; }
@@ -643,22 +594,7 @@
   }
   #restart-btn { animation:neonBtnReady .5s ease .4s both; }
   #go-home-btn  { animation:neonBtnReady .5s ease .52s both; }
-  .home-title-l2 {
-    display:block;
-    font-size:clamp(11px,min(4vw,4.5dvh),40px);
-    letter-spacing:clamp(4px,1.5vw,14px);
-    color:rgba(255,255,255,.92);
-    text-shadow:0 0 24px rgba(0,245,255,.6), 0 2px 6px rgba(0,0,0,.9);
-  }
-  .home-tagline {
-    font-family:'Rajdhani',sans-serif;
-    font-size:clamp(8px,1.2vw,12px);
-    font-weight:600; letter-spacing:3px;
-    color:rgba(0,245,255,.65);
-    text-transform:uppercase;
-    margin-top:2px;
-    text-shadow:0 0 10px rgba(0,245,255,.35);
-  }
+  /* title-l2, tagline defined in responsive section below */
   /* Keep .screen-title/.screen-sub for any other screens that use them */
   .screen-title { font-family:'Orbitron',monospace; font-size:clamp(28px,6vw,52px); font-weight:900; letter-spacing:4px; color:var(--neon-cyan); text-shadow:0 0 20px var(--neon-cyan),0 0 50px rgba(0,245,255,.5),0 2px 8px rgba(0,0,0,.9); margin-bottom:4px; text-align:center; }
   .screen-sub { font-size:clamp(11px,2vw,15px); letter-spacing:6px; color:rgba(0,245,255,.75); text-transform:uppercase; margin-bottom:clamp(20px,3.5vh,32px); text-shadow:0 0 10px rgba(0,245,255,.4),0 1px 4px rgba(0,0,0,.8); font-family:'Rajdhani',sans-serif; font-weight:600; }
@@ -1544,130 +1480,148 @@
   /* ─────────────────── HOME SCREEN STATS ─────────────────── */
 
   /* Stat cards grid */
+  /* ══════════════════════════════════════════
+     HOME SCREEN — Laptop bada, Mobile fit
+     Key trick: clamp(mobile_min, fluid, laptop_max)
+     dvh = actual visible height (excludes browser bar)
+  ══════════════════════════════════════════ */
+
+  .home-content {
+    position:absolute;
+    inset:0; z-index:2;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:clamp(4px, 1.8dvh, 22px);
+    overflow:hidden;
+    padding:clamp(4px,1.5dvh,24px) clamp(8px,2vw,24px);
+    box-sizing:border-box;
+    pointer-events:none;
+  }
+  .home-content > * { pointer-events:auto; }
+
+  /* ── Title block ── */
+  .home-title-block {
+    position:relative; z-index:2;
+    text-align:center; flex-shrink:0;
+    animation:titleBlockFloat 4s ease-in-out infinite alternate;
+  }
+  .home-eyebrow {
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(8px, 1.1vw, 13px);
+    font-weight:700; letter-spacing:5px;
+    color:rgba(0,245,255,.5);
+    text-transform:uppercase;
+    margin-bottom:clamp(2px,0.5dvh,6px);
+  }
+  .home-title {
+    margin:0; padding:0; border:none;
+    font-family:'Orbitron',monospace;
+    font-weight:900; line-height:0.92;
+    display:flex; flex-direction:column; align-items:center;
+    gap:clamp(1px,0.3dvh,4px);
+  }
+  .home-title-l1 {
+    display:block;
+    /* Laptop: up to 90px. Mobile: shrinks with dvh so it never overflows */
+    font-size:clamp(20px, min(9vw, 9dvh), 90px);
+    letter-spacing:clamp(3px,1.5vw,10px);
+    background:linear-gradient(135deg,#00f5ff 0%,#ffffff 40%,#00f5ff 70%,#bf00ff 100%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 18px rgba(0,245,255,.7));
+    animation:titleShimmer 4s linear infinite;
+    background-size:200% 100%;
+  }
+  .home-title-l2 {
+    display:block;
+    font-size:clamp(12px, min(5.5vw, 5.5dvh), 52px);
+    letter-spacing:clamp(5px,2vw,16px);
+    color:rgba(255,255,255,.92);
+    text-shadow:0 0 24px rgba(0,245,255,.6), 0 2px 6px rgba(0,0,0,.9);
+  }
+  .home-tagline {
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(9px, 1.2vw, 15px);
+    font-weight:600; letter-spacing:4px;
+    color:rgba(0,245,255,.65);
+    text-transform:uppercase;
+    margin-top:clamp(2px,0.5dvh,8px);
+    text-shadow:0 0 10px rgba(0,245,255,.35);
+  }
+
+  /* ── Stat cards ── */
   .home-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(4px, 1vw, 8px);
-    margin: 0;
-    width: min(96vw, 460px);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:clamp(5px,1vw,14px);
+    width:min(94vw, 560px);
     flex-shrink:0;
   }
-  @media (max-width: 480px) {
-    .home-stats { grid-template-columns: repeat(2, 1fr); width: min(94vw, 310px); gap:6px; }
-  }
-
   .home-stat-card {
-    background: rgba(0,245,255,.04);
-    border: 1px solid rgba(0,245,255,.18);
-    border-radius: 10px;
-    padding: clamp(6px,1dvh,11px) clamp(5px,1vw,9px);
-    text-align: center;
-    cursor: default;
-    transition: transform .22s cubic-bezier(.34,1.56,.64,1), border-color .22s ease, box-shadow .22s ease;
-    position: relative;
-    overflow: hidden;
-    animation: cardFadeUp .5s cubic-bezier(.22,.68,0,1.1) both;
-    min-width: 0;
-    flex-shrink:0;
+    background:rgba(0,245,255,.04);
+    border:1px solid rgba(0,245,255,.18);
+    border-radius:clamp(8px,1vw,14px);
+    padding:clamp(6px,1.2dvh,16px) clamp(5px,1vw,12px);
+    text-align:center;
+    cursor:default;
+    transition:transform .22s cubic-bezier(.34,1.56,.64,1), border-color .22s, box-shadow .22s;
+    position:relative; overflow:hidden;
+    animation:cardFadeUp .5s cubic-bezier(.22,.68,0,1.1) both;
+    min-width:0; flex-shrink:0;
   }
-  #hsc-best   { animation-delay:.05s; }
-  #hsc-streak { animation-delay:.12s; }
-  #hsc-coins  { animation-delay:.19s; }
-  #hsc-games  { animation-delay:.26s; }
-  @keyframes cardFadeUp {
-    from { opacity:0; transform:translateY(14px) scale(.95); }
-    to   { opacity:1; transform:translateY(0) scale(1); }
-  }
-  .home-stat-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0,245,255,.08) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity .2s;
-  }
-  .home-stat-card:hover { transform: translateY(-3px); border-color: rgba(0,245,255,.5); box-shadow: 0 0 18px rgba(0,245,255,.18), 0 4px 12px rgba(0,0,0,.5); }
-  .home-stat-card:hover::before { opacity: 1; }
-  .home-stat-card:active { transform: translateY(-1px) scale(.97); }
-
-  /* Colour-code each card */
-  #hsc-best   { border-color: rgba(0,245,255,.25); }
-  #hsc-streak { border-color: rgba(255,153,0,.25); }
-  #hsc-coins  { border-color: rgba(255,215,0,.25); }
-  #hsc-games  { border-color: rgba(191,0,255,.25); }
-
-  #hsc-best:hover   { border-color: rgba(0,245,255,.6);  box-shadow: 0 0 18px rgba(0,245,255,.22); }
-  #hsc-streak:hover { border-color: rgba(255,153,0,.6);  box-shadow: 0 0 18px rgba(255,153,0,.22); }
-  #hsc-coins:hover  { border-color: rgba(255,215,0,.6);  box-shadow: 0 0 18px rgba(255,215,0,.22); }
-  #hsc-games:hover  { border-color: rgba(191,0,255,.6);  box-shadow: 0 0 18px rgba(191,0,255,.22); }
-
+  .hsc-icon  { font-size:clamp(14px,2.5vw,26px); line-height:1; margin-bottom:clamp(1px,0.3dvh,4px); }
   .hsc-label {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(9px, 1.5vw, 11px);
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: rgba(255,255,255,.55);
-    text-transform: uppercase;
-    margin-bottom: 2px;
-    text-shadow: 0 1px 4px rgba(0,0,0,.9);
-    white-space: nowrap;
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(8px,1vw,12px);
+    font-weight:700; letter-spacing:1.5px;
+    color:rgba(255,255,255,.55);
+    text-transform:uppercase;
+    margin-bottom:clamp(1px,0.3dvh,4px);
+    white-space:nowrap;
   }
   .hsc-val {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(13px, 3.5vw, 20px);
-    font-weight: 900;
-    line-height: 1;
-    white-space: nowrap;
+    font-family:'Orbitron',monospace;
+    font-size:clamp(13px,2.8vw,26px);
+    font-weight:900; line-height:1;
+    white-space:nowrap;
   }
-  #hsc-best   .hsc-val { color: var(--neon-cyan);   text-shadow: 0 0 14px rgba(0,245,255,.8),   0 2px 6px rgba(0,0,0,.9); }
-  #hsc-streak .hsc-val { color: var(--neon-orange); text-shadow: 0 0 14px rgba(255,153,0,.8),   0 2px 6px rgba(0,0,0,.9); }
-  #hsc-coins  .hsc-val { color: var(--neon-gold);   text-shadow: 0 0 14px rgba(255,215,0,.8),   0 2px 6px rgba(0,0,0,.9); }
-  #hsc-games  .hsc-val { color: var(--neon-purple); text-shadow: 0 0 14px rgba(191,0,255,.8),   0 2px 6px rgba(0,0,0,.9); }
 
-  /* Home screen button row */
-  /* ── Home screen button layout ── */
+  /* ── PLAY button ── */
   .home-primary-row {
     display:flex; justify-content:center;
-    width:100%;
-    flex-shrink:0;
+    width:100%; flex-shrink:0;
   }
   .home-play-btn {
-    position:relative; z-index:32;
-    pointer-events:auto;
-    display:inline-flex; align-items:center; justify-content:center; gap:10px;
-    width:min(92vw, 280px);
-    min-height:clamp(40px,6dvh,56px);
-    padding:0 clamp(14px,3vw,32px);
+    position:relative; z-index:32; pointer-events:auto;
+    display:inline-flex; align-items:center; justify-content:center; gap:12px;
+    width:min(90vw, 340px);
+    min-height:clamp(40px, 7dvh, 72px);
+    padding:0 clamp(16px,4vw,48px);
     font-family:'Orbitron',monospace;
-    font-size:clamp(14px,3.5vw,19px);
-    font-weight:900; letter-spacing:4px;
+    font-size:clamp(14px, min(4vw,4dvh), 24px);
+    font-weight:900; letter-spacing:5px;
     color:#0a0e1a;
-    background:linear-gradient(135deg, #00f5ff 0%, #00c8e0 50%, #00f5ff 100%);
+    background:linear-gradient(135deg,#00f5ff 0%,#00c8e0 50%,#00f5ff 100%);
     background-size:200% 100%;
-    border:none; border-radius:13px;
-    cursor:pointer;
-    overflow:hidden;
+    border:none; border-radius:clamp(12px,1.5vw,18px);
+    cursor:pointer; overflow:hidden;
     box-shadow:0 0 0 1px rgba(0,245,255,.4),0 0 28px rgba(0,245,255,.5),0 6px 28px rgba(0,0,0,.6);
     transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease,background-position .4s ease;
-    -webkit-tap-highlight-color:transparent;
-    user-select:none;
+    -webkit-tap-highlight-color:transparent; user-select:none;
     animation:playBtnPulse 2.8s ease-in-out infinite;
   }
+
   .home-play-btn:hover {
     transform:scale(1.06) translateY(-2px);
     background-position:100% 0;
-    box-shadow:
-      0 0 0 2px rgba(0,245,255,.7),
-      0 0 40px rgba(0,245,255,.7),
-      0 0 80px rgba(0,245,255,.3),
-      0 8px 32px rgba(0,0,0,.7);
+    box-shadow:0 0 0 2px rgba(0,245,255,.7),0 0 40px rgba(0,245,255,.7),0 0 80px rgba(0,245,255,.3),0 8px 32px rgba(0,0,0,.7);
   }
   .home-play-btn:active { transform:scale(.96); transition:transform .07s; }
   .hpb-icon { font-size:1.1em; line-height:1; }
   .hpb-text { letter-spacing:6px; }
   .hpb-shine {
     position:absolute; top:0; left:-80%; width:50%; height:100%;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
     transform:skewX(-18deg);
     animation:playShine 3.5s ease-in-out infinite;
   }
@@ -1678,91 +1632,68 @@
     100%   { left:140%; opacity:0; }
   }
   .home-secondary-row {
-    display:flex; gap:clamp(5px,1.2vw,10px);
+    display:flex; gap:clamp(6px,1.2vw,12px);
     justify-content:center; flex-wrap:wrap;
-    width:100%;
-    flex-shrink:0;
+    width:100%; flex-shrink:0;
   }
   .home-sec-btn {
-    display:inline-flex; align-items:center; gap:6px;
-    padding:clamp(7px,1dvh,11px) clamp(9px,2vw,16px);
+    display:inline-flex; align-items:center; gap:7px;
+    padding:clamp(7px,1.2dvh,14px) clamp(10px,2vw,22px);
     font-family:'Orbitron',monospace;
-    font-size:clamp(9px,1.8vw,12px);
+    font-size:clamp(9px, min(1.8vw,1.8dvh), 14px);
     font-weight:700; letter-spacing:1.5px;
     color:rgba(0,245,255,.85);
     background:rgba(0,245,255,.05);
     border:1.5px solid rgba(0,245,255,.22);
-    border-radius:11px; cursor:pointer;
-    position:relative; overflow:hidden;
-    transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s ease,border-color .2s ease,box-shadow .2s ease;
+    border-radius:clamp(10px,1vw,14px);
+    cursor:pointer; position:relative; overflow:hidden;
+    transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s,border-color .2s,box-shadow .2s;
     -webkit-tap-highlight-color:transparent;
-    user-select:none;
-    pointer-events:auto;
-    min-height:clamp(34px,5dvh,44px);
+    user-select:none; pointer-events:auto;
+    min-height:clamp(34px,5.5dvh,52px);
     animation:secBtnGlow 3s ease-in-out infinite;
   }
+  .home-sec-btn:hover { transform:scale(1.06) translateY(-2px); background:rgba(0,245,255,.12); border-color:rgba(0,245,255,.5); box-shadow:0 0 20px rgba(0,245,255,.25); }
+  .home-sec-btn:active { transform:scale(.94); transition:transform .07s; }
   .home-sec-btn:nth-child(2){ animation-delay:.4s; }
   .home-sec-btn:nth-child(3){ animation-delay:.8s; }
   .home-sec-btn:nth-child(4){ animation-delay:1.2s; }
-  .home-sec-btn:hover {
-    transform:scale(1.06) translateY(-2px);
-    background:rgba(0,245,255,.12);
-    border-color:rgba(0,245,255,.5);
-    box-shadow:0 0 20px rgba(0,245,255,.25), 0 4px 12px rgba(0,0,0,.4);
-  }
-  .home-sec-btn:active { transform:scale(.94); transition:transform .07s; }
-  /* stat card icon row */
-  .hsc-icon { font-size:clamp(14px,2.5vw,20px); line-height:1; margin-bottom:1px; }
-  .hsc-label {
-    font-family:'Rajdhani',sans-serif;
-    font-size:clamp(8px,1.3vw,10px);
-    font-weight:700; letter-spacing:1.5px;
-    color:rgba(255,255,255,.55);
-    text-transform:uppercase;
-    margin-bottom:2px;
-    white-space:nowrap;
-  }
-  .hsc-val {
-    font-family:'Orbitron',monospace;
-    font-size:clamp(12px,3vw,20px);
-    font-weight:900; line-height:1;
-    white-space:nowrap;
-  }
 
+  /* ── Hint ── */
   .home-hint {
-    position:relative; z-index:2;
-    font-size: clamp(7px, 1.1vw, 10px);
-    letter-spacing: 1.5px;
-    color: rgba(0,245,255,.4);
-    text-align: center;
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700;
-    max-width: 90vw;
-    flex-shrink:0;
+    position:relative; z-index:2; flex-shrink:0;
+    font-size:clamp(7px, 1vw, 11px);
+    letter-spacing:2px; color:rgba(0,245,255,.4);
+    text-align:center;
+    font-family:'Rajdhani',sans-serif; font-weight:700;
+    text-shadow:0 0 8px rgba(0,245,255,.2);
+    max-width:90vw;
   }
 
-  /* ── Mobile: tighter spacing ── */
-  @media (max-width: 480px), (max-height: 750px) {
-    .home-eyebrow   { font-size:7px; letter-spacing:3px; margin-bottom:1px; }
-    .home-tagline   { font-size:8px; margin-top:1px; }
-    .home-stat-card { padding:5px 4px; border-radius:8px; }
-    .hsc-icon       { font-size:13px; }
-    .hsc-label      { font-size:7px; margin-bottom:1px; }
-    .hsc-val        { font-size:12px; }
-    .home-sec-btn   { padding:6px 9px; font-size:9px; min-height:32px; border-radius:9px; }
-    .home-hint      { font-size:7px; }
+  /* ── Mobile adjustments (portrait phone) ── */
+  @media (max-width:480px), (max-height:700px) {
+    .home-content  { gap:clamp(3px,1dvh,10px); }
+    .home-eyebrow  { font-size:7px; letter-spacing:3px; }
+    .home-tagline  { font-size:8px; }
+    .home-stats    { width:min(94vw,300px); gap:5px; grid-template-columns:repeat(2,1fr); }
+    .home-stat-card{ padding:5px 4px; border-radius:8px; }
+    .hsc-icon      { font-size:13px; }
+    .hsc-label     { font-size:7px; letter-spacing:1px; }
+    .hsc-val       { font-size:12px; }
+    .home-play-btn { width:min(90vw,260px); }
+    .home-sec-btn  { padding:6px 10px; font-size:9px; min-height:32px; }
+    .home-hint     { font-size:7px; letter-spacing:1px; }
   }
 
   /* ── Very small phones ── */
-  @media (max-width: 360px), (max-height: 620px) {
-    .home-eyebrow  { display:none; }
-    .home-tagline  { display:none; }
+  @media (max-width:360px), (max-height:600px) {
+    .home-eyebrow { display:none; }
+    .home-tagline { display:none; }
+    .home-hint    { display:none; }
     .home-stat-card{ padding:4px 3px; }
-    .hsc-icon      { font-size:12px; }
-    .hsc-val       { font-size:11px; }
-    .home-play-btn { min-height:36px; font-size:13px; }
-    .home-sec-btn  { padding:5px 8px; font-size:8px; min-height:30px; }
-    .home-hint     { display:none; }
+    .hsc-icon     { font-size:11px; }
+    .hsc-val      { font-size:11px; }
+    .home-sec-btn { padding:5px 8px; font-size:8px; min-height:28px; }
   }
 
   /* ─────────────────── CINEMA MODULE CSS ─────────────────── */
