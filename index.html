@@ -1119,6 +1119,35 @@
     background:rgba(57,255,20,.1);border:1.5px solid rgba(57,255,20,.3);
     color:#39ff14;cursor:default;
   }
+
+  /* ── Store: mobile-only shrink ── */
+  @media (max-width:600px) {
+    #store-box {
+      padding:14px 14px 14px;
+      gap:8px;
+      border-radius:16px;
+      max-height:92vh;
+    }
+    .store-title { font-size:14px; letter-spacing:2px; }
+    .store-close-btn { width:28px; height:28px; font-size:13px; }
+    .store-header { padding-bottom:8px; }
+    .store-tabs { gap:6px; }
+    .store-tab { padding:7px 6px; font-size:10px; letter-spacing:1px; border-radius:8px; }
+    .store-content { max-height:58vh; }
+    .store-grid { gap:7px; }
+    .skin-item { padding:10px 6px 8px; gap:5px; border-radius:10px; }
+    .skin-preview-box { width:30px; height:30px; border-radius:6px; }
+    .skin-preview-box::after { width:8px; height:8px; }
+    .skin-name-lbl { font-size:8px; letter-spacing:1px; }
+    .skin-badge { font-size:7px; padding:1px 5px; top:4px; right:4px; }
+    .upgrade-item { padding:10px 12px; gap:10px; border-radius:10px; margin-bottom:7px; }
+    .upgrade-icon { font-size:20px; }
+    .upgrade-name { font-size:10px; letter-spacing:1px; }
+    .upgrade-desc { font-size:10px; }
+    .upgrade-btn { padding:6px 10px; font-size:9px; }
+    .upgrade-level-dot { width:8px; height:8px; }
+  }
+
   .howto-panel {
     background:linear-gradient(160deg,rgba(8,14,34,.98) 0%,rgba(5,10,24,.99) 100%);
     border:1.5px solid rgba(0,245,255,.22);
@@ -2729,13 +2758,13 @@
     cursor:pointer;
   }
 
-  /* ── MOBILE overrides (≤ 500px) ── */
-  @media (max-width:500px) {
+  /* ── MOBILE overrides (≤ 600px) ── */
+  @media (max-width:600px) {
     .settings-box {
-      width:100vw;
-      height:100dvh;
-      border-radius:0;
-      border:none;
+      width:min(98vw, 420px);
+      height:min(90dvh, 520px);
+      border-radius:16px;
+      border:1px solid rgba(0,245,255,.26);
     }
     .settings-body {
       flex-direction:column;
@@ -2747,18 +2776,18 @@
       height:auto;
       border-right:none;
       border-bottom:1px solid rgba(0,245,255,.12);
-      padding:8px 10px;
-      gap:6px;
+      padding:6px 8px;
+      gap:5px;
       overflow-x:auto;
       overflow-y:hidden;
     }
     .stab-btn {
       flex-direction:column;
-      gap:3px;
-      padding:8px 10px;
-      min-width:60px;
-      min-height:52px;
-      font-size:9px;
+      gap:2px;
+      padding:6px 8px;
+      min-width:52px;
+      min-height:44px;
+      font-size:8px;
       text-align:center;
       white-space:nowrap;
       justify-content:center;
@@ -2766,33 +2795,46 @@
       flex-shrink:0;
     }
     .settings-content-panel {
-      padding:12px 12px;
-      gap:8px;
+      padding:10px 10px;
+      gap:6px;
     }
     .settings-row {
-      padding:12px 12px;
+      padding:9px 10px;
       flex-wrap:wrap;
-      gap:8px;
+      gap:6px;
+      border-radius:10px;
     }
     .settings-action-name {
-      font-size:13px;
+      font-size:12px;
       min-width:100%;
     }
     .settings-key-btn {
       width:100%;
-      min-height:44px;
+      min-height:38px;
+      font-size:10px;
+      padding:7px 10px;
     }
     .settings-row input[type=range] {
       width:100%;
     }
     .settings-header {
-      padding:12px 14px;
+      padding:10px 12px;
     }
     .settings-title {
-      font-size:16px;
+      font-size:14px;
+      letter-spacing:2px;
+    }
+    .settings-close-btn {
+      padding:6px 10px;
+      font-size:15px;
+      min-width:36px; min-height:36px;
     }
     .settings-footer {
-      padding:10px 12px;
+      padding:8px 10px;
+    }
+    .settings-reset-btn, .settings-back-btn {
+      font-size:10px;
+      padding:7px 12px;
     }
   }
 
@@ -3380,8 +3422,8 @@
       background:linear-gradient(160deg,rgba(8,14,34,.99) 0%,rgba(3,8,20,.99) 100%);
       border:1px solid rgba(0,245,255,.15);
       border-top:2px solid rgba(0,245,255,.4);
-      border-radius:24px;
-      padding:36px 40px 32px;
+      border-radius:clamp(14px,3vw,24px);
+      padding:clamp(18px,4vw,36px) clamp(18px,5vw,40px) clamp(16px,3vw,32px);
       width:min(420px,92vw);
       box-shadow:0 0 80px rgba(0,245,255,.06),0 30px 80px rgba(0,0,0,.9);
       display:flex;flex-direction:column;align-items:center;gap:0;
@@ -3392,26 +3434,26 @@
       <div style="position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.7) 40%,rgba(0,245,255,.7) 60%,transparent);border-radius:1px;"></div>
 
       <!-- Label -->
-      <div style="font-family:'Orbitron',monospace;font-size:clamp(14px,2.5vw,18px);font-weight:700;letter-spacing:6px;color:rgba(0,245,255,.6);text-transform:uppercase;margin-bottom:20px;text-shadow:0 0 14px rgba(0,245,255,.3);">CREDITS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:clamp(12px,2.5vw,18px);font-weight:700;letter-spacing:6px;color:rgba(0,245,255,.6);text-transform:uppercase;margin-bottom:clamp(10px,2vw,20px);text-shadow:0 0 14px rgba(0,245,255,.3);">CREDITS</div>
 
       <!-- Developer name -->
-      <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(14px,2.5vw,17px);font-weight:700;letter-spacing:4px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:8px;">Game Developer</div>
-      <div style="font-family:'Orbitron',monospace;font-size:clamp(18px,4.2vw,28px);font-weight:900;letter-spacing:5px;background:linear-gradient(135deg,#00f5ff 0%,#fff 50%,#00f5ff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(0,245,255,.5));animation:titleShimmer 4s linear infinite;margin-bottom:6px;">MAYANK BRO</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(10px,1.6vw,12px);letter-spacing:4px;color:rgba(255,255,255,.22);text-transform:uppercase;margin-bottom:32px;">GRAVITY FLIP RUN · 2025</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(11px,2.5vw,17px);font-weight:700;letter-spacing:4px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:6px;">Game Developer</div>
+      <div style="font-family:'Orbitron',monospace;font-size:clamp(15px,4.2vw,28px);font-weight:900;letter-spacing:5px;background:linear-gradient(135deg,#00f5ff 0%,#fff 50%,#00f5ff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(0,245,255,.5));animation:titleShimmer 4s linear infinite;margin-bottom:4px;">MAYANK BRO</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:clamp(9px,1.6vw,12px);letter-spacing:4px;color:rgba(255,255,255,.22);text-transform:uppercase;margin-bottom:clamp(16px,3vw,32px);">GRAVITY FLIP RUN · 2025</div>
 
       <!-- Divider -->
-      <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin-bottom:24px;"></div>
+      <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin-bottom:clamp(12px,2.5vw,24px);"></div>
 
       <!-- Instagram link -->
       <a href="https://www.instagram.com/mayank_862008?igsh=MWMzMmI0dXZkNmJndw==" target="_blank" rel="noopener noreferrer" style="
-        display:flex;align-items:center;gap:14px;
-        width:100%;padding:16px 20px;
+        display:flex;align-items:center;gap:12px;
+        width:100%;padding:clamp(10px,2vw,16px) clamp(12px,3vw,20px);
         background:rgba(255,255,255,.03);
         border:1px solid rgba(255,255,255,.08);
-        border-radius:14px;
+        border-radius:12px;
         text-decoration:none;
         transition:background .2s,border-color .2s,transform .18s cubic-bezier(.34,1.56,.64,1);
-        margin-bottom:24px;
+        margin-bottom:clamp(12px,2.5vw,24px);
       " onmouseover="this.style.background='rgba(131,58,180,.12)';this.style.borderColor='rgba(252,176,69,.3)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,.03)';this.style.borderColor='rgba(255,255,255,.08)';this.style.transform='translateY(0)'">
         <!-- Instagram icon -->
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#833ab4 0%,#fd1d1d 50%,#fcb045 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(131,58,180,.4);">
@@ -3426,11 +3468,11 @@
 
       <!-- Close button -->
       <button id="credits-close-btn" style="
-        width:100%;padding:15px;
+        width:100%;padding:clamp(10px,2vw,15px);
         background:transparent;
         border:2px solid var(--neon-cyan);
         border-radius:12px;
-        font-family:'Orbitron',monospace;font-size:clamp(12px,2vw,14px);
+        font-family:'Orbitron',monospace;font-size:clamp(11px,2vw,14px);
         font-weight:700;letter-spacing:4px;
         color:var(--neon-cyan);
         cursor:pointer;
