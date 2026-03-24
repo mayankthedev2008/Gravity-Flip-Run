@@ -775,6 +775,100 @@
   @keyframes toastIn  { from{transform:translateY(14px);opacity:0} to{transform:translateY(0);opacity:1} }
   @keyframes toastOut { to{transform:translateY(-8px);opacity:0} }
 
+  /* ── No Coins Center Popup ── */
+  #no-coins-popup {
+    display:none;
+    position:fixed; inset:0; z-index:9998;
+    align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  #no-coins-popup.show { display:flex; }
+  .no-coins-box {
+    display:flex; flex-direction:column; align-items:center;
+    gap:clamp(8px,1.5vh,14px);
+    padding:clamp(22px,4vh,36px) clamp(28px,6vw,52px);
+    background:linear-gradient(145deg, rgba(8,2,18,.98) 0%, rgba(20,2,10,.98) 100%);
+    border:1.5px solid rgba(255,0,110,.55);
+    border-radius:20px;
+    box-shadow:
+      0 0 0 1px rgba(255,0,110,.12),
+      0 0 40px rgba(255,0,110,.25),
+      0 0 80px rgba(255,0,110,.1),
+      0 20px 60px rgba(0,0,0,.85);
+    animation: noCoinsIn .35s cubic-bezier(.34,1.56,.64,1) both;
+    position:relative; overflow:hidden;
+    max-width: min(340px, 88vw);
+  }
+  /* Top glow line */
+  .no-coins-box::before {
+    content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,0,110,.8) 40%, rgba(255,0,110,.8) 60%, transparent);
+  }
+  /* Subtle radial bg glow */
+  .no-coins-box::after {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,0,110,.08) 0%, transparent 70%);
+  }
+  .no-coins-icon {
+    font-size:clamp(36px,8vw,52px);
+    animation: noCoinsShake .5s cubic-bezier(.36,.07,.19,.97) .15s both;
+    filter: drop-shadow(0 0 12px rgba(255,0,110,.7));
+    position:relative; z-index:1;
+  }
+  .no-coins-title {
+    font-family:'Orbitron',monospace;
+    font-size:clamp(13px,3.5vw,18px);
+    font-weight:900; letter-spacing:3px;
+    color:#ff006e;
+    text-shadow: 0 0 14px rgba(255,0,110,.9), 0 0 28px rgba(255,0,110,.4);
+    text-align:center; white-space:nowrap;
+    position:relative; z-index:1;
+  }
+  .no-coins-sub {
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(11px,2.5vw,14px);
+    font-weight:600; letter-spacing:1.5px;
+    color:rgba(255,255,255,.45);
+    text-align:center;
+    position:relative; z-index:1;
+  }
+  /* Coin count hint */
+  .no-coins-hint {
+    display:flex; align-items:center; gap:6px;
+    padding:6px 16px;
+    background:rgba(255,215,0,.07);
+    border:1px solid rgba(255,215,0,.2);
+    border-radius:20px;
+    font-family:'Orbitron',monospace;
+    font-size:clamp(10px,2.2vw,13px);
+    font-weight:700; letter-spacing:1px;
+    color:rgba(255,215,0,.8);
+    text-shadow:0 0 10px rgba(255,215,0,.5);
+    position:relative; z-index:1;
+    animation: noCoinsHintPop .4s cubic-bezier(.34,1.56,.64,1) .25s both;
+  }
+  @keyframes noCoinsIn {
+    0%   { opacity:0; transform:scale(.7) translateY(10px); }
+    60%  { transform:scale(1.05) translateY(-3px); }
+    100% { opacity:1; transform:scale(1) translateY(0); }
+  }
+  @keyframes noCoinsOut {
+    0%   { opacity:1; transform:scale(1); }
+    100% { opacity:0; transform:scale(.88) translateY(-8px); }
+  }
+  @keyframes noCoinsShake {
+    0%,100% { transform:translateX(0) rotate(0deg); }
+    15%     { transform:translateX(-6px) rotate(-8deg); }
+    30%     { transform:translateX(6px)  rotate(8deg); }
+    45%     { transform:translateX(-4px) rotate(-5deg); }
+    60%     { transform:translateX(4px)  rotate(4deg); }
+    75%     { transform:translateX(-2px) rotate(-2deg); }
+  }
+  @keyframes noCoinsHintPop {
+    0%   { opacity:0; transform:scale(.8); }
+    100% { opacity:1; transform:scale(1); }
+  }
+
   /* levelup popup removed */
   #levelup-popup { display:none!important; }
 
@@ -2895,77 +2989,36 @@
   /* ── Rotate Device Overlay ── */
   #rotate-overlay {
     display:none;
-    position:fixed;
-    /* Use dvh/dvw so overlay covers the REAL visible area even when
-       Chrome's address bar is shown/hidden or user has zoomed */
-    top:0; left:0;
-    width:100dvw; height:100dvh;
-    /* Fallback for browsers without dvw/dvh */
-    width:100vw; height:100vh;
-    z-index:2147483647; /* max z-index — above everything */
-    background:rgba(3,5,14,0.98);
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(3,5,14,0.97);
     flex-direction:column;
     align-items:center; justify-content:center;
-    gap:clamp(14px,3vh,28px);
-    /* Force overlay to ignore any page zoom/transform */
-    transform:none !important;
-    /* Prevent any touch interaction with the game below */
-    touch-action:none;
-    pointer-events:all;
+    gap:20px;
   }
   #rotate-overlay.show { display:flex; }
-
-  /* Neon border pulse on overlay */
-  #rotate-overlay::before {
-    content:'';
-    position:absolute; inset:0;
-    background:
-      radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0,245,255,.04) 0%, transparent 70%);
-    pointer-events:none;
-  }
-
   .rotate-icon {
-    font-size:clamp(56px,14vw,88px);
-    animation: rotateAnim 1.8s cubic-bezier(.68,-.55,.27,1.55) infinite;
+    font-size:72px;
+    animation: rotateAnim 1.5s ease-in-out infinite;
     transform-origin: center;
-    filter: drop-shadow(0 0 18px rgba(0,245,255,0.5));
   }
   @keyframes rotateAnim {
     0%   { transform: rotate(0deg);   }
-    35%  { transform: rotate(-90deg); }
-    65%  { transform: rotate(-90deg); }
+    40%  { transform: rotate(-90deg); }
+    60%  { transform: rotate(-90deg); }
     100% { transform: rotate(0deg);   }
   }
   .rotate-title {
     font-family:'Orbitron',monospace;
-    /* Use svw (small viewport width) so text scales correctly even when zoomed */
-    font-size:clamp(15px,5svw,24px);
+    font-size:clamp(16px,4vw,22px);
     font-weight:900; color:#00f5ff;
-    text-shadow:0 0 16px rgba(0,245,255,0.8), 0 0 32px rgba(0,245,255,0.3);
-    letter-spacing:3px; text-align:center;
-    padding:0 clamp(16px,5vw,40px);
+    text-shadow:0 0 16px rgba(0,245,255,0.7);
+    letter-spacing:3px; text-align:center; padding:0 20px;
   }
   .rotate-sub {
     font-family:'Rajdhani',sans-serif;
-    font-size:clamp(12px,3.5svw,17px);
-    color:rgba(255,255,255,0.55);
-    letter-spacing:1.5px; text-align:center;
-    padding:0 clamp(24px,8vw,60px);
-    line-height:1.5;
-  }
-  /* Animated hint arrow */
-  .rotate-hint {
-    display:flex; align-items:center; gap:10px;
-    margin-top:4px;
-    font-family:'Rajdhani',sans-serif;
-    font-size:clamp(10px,2.5svw,13px);
-    color:rgba(0,245,255,0.4);
-    letter-spacing:2px;
-    animation:rotateHintPulse 2s ease-in-out infinite;
-  }
-  @keyframes rotateHintPulse {
-    0%,100% { opacity:0.4; }
-    50%     { opacity:0.9; }
+    font-size:clamp(13px,3vw,16px);
+    color:rgba(255,255,255,0.5);
+    letter-spacing:2px; text-align:center; padding:0 30px;
   }
 
 </style>
@@ -2977,7 +3030,16 @@
     <div class="rotate-icon">📱</div>
     <div class="rotate-title">ROTATE YOUR DEVICE</div>
     <div class="rotate-sub">Please rotate to landscape mode for the best experience</div>
-    <div class="rotate-hint">⟵ LANDSCAPE MODE REQUIRED ⟶</div>
+  </div>
+
+  <!-- ── Not Enough Coins Center Popup ── -->
+  <div id="no-coins-popup">
+    <div class="no-coins-box">
+      <div class="no-coins-icon">🪙</div>
+      <div class="no-coins-title">NOT ENOUGH COINS</div>
+      <div class="no-coins-sub">Keep playing to earn more!</div>
+      <div class="no-coins-hint" id="no-coins-hint-val">₹ 0 / 0</div>
+    </div>
   </div>
 
   <div id="bg-grad"></div>
@@ -8492,7 +8554,7 @@ function renderStore() {
             showStoreToast('🌈 RAINBOW unlocked!', '#bf00ff');
           } else {
             sfxNoCoins();
-            showStoreToast('Not enough coins! ₹', '#ff006e');
+            showNoCoinsPopup(skin.price);
           }
         });
         grid.appendChild(div);
@@ -8528,7 +8590,7 @@ function renderStore() {
           showStoreToast('🎉 ' + skin.name + ' unlocked!', skin.color);
         } else {
           sfxNoCoins();
-          showStoreToast('Not enough coins! ₹', '#ff006e');
+          showNoCoinsPopup(skin.price);
         }
       });
       grid.appendChild(div);
@@ -8569,7 +8631,7 @@ function renderStore() {
       const btn = div.querySelector('.upgrade-btn');
       if (!maxed) {
         btn.addEventListener('click', () => {
-          if (!canAfford) { sfxNoCoins(); showStoreToast('Not enough coins! ₹', '#ff006e'); return; }
+          if (!canAfford) { sfxNoCoins(); showNoCoinsPopup(nextCost); return; }
           PROG.coins -= nextCost;
           PROG.upgrades[upg.id] = upg.maxLevel === 1 ? true : level + 1;
           saveProg(); renderStore();
@@ -8583,6 +8645,11 @@ function renderStore() {
 }
 
 function showStoreToast(msg, color) {
+  // "Not enough coins" gets its own special center popup instead
+  if(msg && msg.toLowerCase().includes('not enough coins')){
+    showNoCoinsPopup();
+    return;
+  }
   const t = document.createElement('div');
   t.style.cssText = `position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
     background:rgba(5,10,20,.96);border:1px solid ${color};color:${color};
@@ -8593,6 +8660,43 @@ function showStoreToast(msg, color) {
   document.getElementById('store-box').appendChild(t);
   setTimeout(() => t.remove(), 1800);
 }
+
+// Dedicated "Not Enough Coins" center popup
+(function(){
+  let _noCoinsTimer = null;
+  window.showNoCoinsPopup = function(requiredCost) {
+    const popup = document.getElementById('no-coins-popup');
+    const hint  = document.getElementById('no-coins-hint-val');
+    if(!popup) return;
+    // Show current coins vs required (if passed)
+    const current = (typeof PROG !== 'undefined' && PROG.coins != null) ? PROG.coins : 0;
+    if(hint){
+      hint.textContent = requiredCost
+        ? '₹ ' + current + ' / ' + requiredCost + ' needed'
+        : '₹ ' + current + ' coins';
+    }
+    // Reset animation by re-inserting box
+    const box = popup.querySelector('.no-coins-box');
+    if(box){ box.style.animation='none'; void box.offsetWidth; box.style.animation=''; }
+    popup.classList.add('show');
+    // Clear any existing timer
+    if(_noCoinsTimer) clearTimeout(_noCoinsTimer);
+    _noCoinsTimer = setTimeout(() => {
+      const b = popup.querySelector('.no-coins-box');
+      if(b){ b.style.animation = 'noCoinsOut .3s ease-in forwards'; }
+      setTimeout(() => { popup.classList.remove('show'); if(b) b.style.animation=''; }, 300);
+      _noCoinsTimer = null;
+    }, 1800);
+  };
+  // Tap anywhere to dismiss early
+  document.getElementById('no-coins-popup').addEventListener('click', function(){
+    if(_noCoinsTimer){ clearTimeout(_noCoinsTimer); _noCoinsTimer = null; }
+    const b = this.querySelector('.no-coins-box');
+    if(b){ b.style.animation = 'noCoinsOut .25s ease-in forwards'; }
+    const self = this;
+    setTimeout(() => { self.classList.remove('show'); if(b) b.style.animation=''; }, 250);
+  });
+})();
 
 // Store button listeners
 (function(){
@@ -8660,42 +8764,11 @@ if(document.readyState === 'loading'){
   const overlay = document.getElementById('rotate-overlay');
   let _wasGamePausedByRotate = false;
 
-  function isMobileDevice(){
-    return ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-  }
-
   function isPortrait(){
-    // Only enforce on mobile/touch devices
-    if(!isMobileDevice()) return false;
-
-    // Primary check: screen.orientation API (most reliable, zoom-independent)
-    if(window.screen && window.screen.orientation && window.screen.orientation.type){
-      const type = window.screen.orientation.type;
-      return type === 'portrait-primary' || type === 'portrait-secondary';
-    }
-    // Fallback 1: window.orientation (deprecated but widely supported on mobile)
-    if(typeof window.orientation !== 'undefined'){
-      return window.orientation === 0 || window.orientation === 180;
-    }
-    // Fallback 2: compare screen dimensions (NOT window — screen is zoom-independent)
-    return window.screen.height > window.screen.width;
+    // Only show on mobile/touch devices
+    if(!('ontouchstart' in window) && navigator.maxTouchPoints === 0) return false;
+    return window.innerHeight > window.innerWidth;
   }
-
-  // Block pinch-zoom on mobile — prevents layout breakage
-  // (viewport meta user-scalable=no is ignored by Chrome on Android by default)
-  document.addEventListener('touchstart', function(e){
-    if(e.touches.length > 1) e.preventDefault();
-  }, { passive:false });
-  document.addEventListener('touchmove', function(e){
-    if(e.touches.length > 1) e.preventDefault();
-  }, { passive:false });
-  // Block double-tap zoom
-  let _lastTap = 0;
-  document.addEventListener('touchend', function(e){
-    const now = Date.now();
-    if(now - _lastTap < 300){ e.preventDefault(); }
-    _lastTap = now;
-  }, { passive:false });
 
   function checkOrientation(){
     if(isPortrait()){
@@ -8717,20 +8790,10 @@ if(document.readyState === 'loading'){
     }
   }
 
-  // Listen on both resize and orientationchange for maximum coverage
   window.addEventListener('resize', checkOrientation);
-  window.addEventListener('orientationchange', function(){
-    // Small delay — browser needs a moment to update dimensions after rotation
-    setTimeout(checkOrientation, 150);
-    setTimeout(checkOrientation, 400); // second check for slow devices
-  });
-  if(window.screen && window.screen.orientation){
-    window.screen.orientation.addEventListener('change', function(){
-      setTimeout(checkOrientation, 100);
-    });
-  }
+  window.addEventListener('orientationchange', ()=>{ setTimeout(checkOrientation, 200); });
   // Check on load
-  setTimeout(checkOrientation, 300);
+  setTimeout(checkOrientation, 500);
 })();
 
 </script>
