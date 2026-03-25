@@ -775,6 +775,81 @@
   @keyframes toastIn  { from{transform:translateY(14px);opacity:0} to{transform:translateY(0);opacity:1} }
   @keyframes toastOut { to{transform:translateY(-8px);opacity:0} }
 
+  /* ── Purchase Celebration Animation ── */
+  #purchase-anim-overlay {
+    position:fixed; inset:0; z-index:9999;
+    pointer-events:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .purchase-burst-ring {
+    position:absolute; border-radius:50%;
+    border:3px solid transparent;
+    transform:scale(0);
+    animation:purchaseRingBurst 0.9s cubic-bezier(0.2,0.8,0.3,1) forwards;
+  }
+  @keyframes purchaseRingBurst {
+    0%   { transform:scale(0);   opacity:1; }
+    60%  { opacity:0.8; }
+    100% { transform:scale(1);   opacity:0; }
+  }
+  .purchase-center-card {
+    position:absolute;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    animation:purchaseCardPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards,
+              purchaseCardFade 0.4s ease-in 1.4s forwards;
+    transform:scale(0); opacity:0;
+  }
+  @keyframes purchaseCardPop {
+    0%   { transform:scale(0) rotate(-8deg); opacity:0; }
+    70%  { transform:scale(1.08) rotate(2deg); opacity:1; }
+    100% { transform:scale(1) rotate(0deg); opacity:1; }
+  }
+  @keyframes purchaseCardFade {
+    to { transform:scale(0.85) translateY(-20px); opacity:0; }
+  }
+  .purchase-emoji {
+    font-size:clamp(42px,8vw,64px);
+    filter:drop-shadow(0 0 20px currentColor);
+    animation:purchaseEmojiSpin 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.08s both;
+    transform:scale(0) rotate(-180deg);
+  }
+  @keyframes purchaseEmojiSpin {
+    0%   { transform:scale(0) rotate(-180deg); }
+    100% { transform:scale(1) rotate(0deg); }
+  }
+  .purchase-label {
+    font-family:'Orbitron',monospace;
+    font-size:clamp(11px,2.5vw,16px);
+    font-weight:900; letter-spacing:4px; text-transform:uppercase;
+    text-shadow:0 0 20px currentColor, 0 0 40px currentColor;
+    white-space:nowrap;
+  }
+  .purchase-sublabel {
+    font-family:'Rajdhani',sans-serif;
+    font-size:clamp(10px,2vw,13px);
+    font-weight:700; letter-spacing:2px;
+    color:rgba(255,255,255,0.8);
+    white-space:nowrap;
+  }
+  .purchase-particle {
+    position:absolute; border-radius:50%;
+    animation:purchaseParticleFly var(--dur,0.9s) ease-out forwards;
+  }
+  @keyframes purchaseParticleFly {
+    0%   { transform:translate(0,0) scale(1); opacity:1; }
+    100% { transform:translate(var(--tx,0px),var(--ty,-120px)) scale(0); opacity:0; }
+  }
+  .purchase-scanline {
+    position:absolute; left:0; right:0; height:2px;
+    animation:purchaseScanline 0.7s ease-out forwards;
+    opacity:0;
+  }
+  @keyframes purchaseScanline {
+    0%   { transform:scaleX(0); opacity:0.9; }
+    50%  { transform:scaleX(1); opacity:0.9; }
+    100% { transform:scaleX(1); opacity:0; }
+  }
+
   /* levelup popup removed */
   #levelup-popup { display:none!important; }
 
@@ -3418,6 +3493,9 @@
     </div>
   </div>
 
+  <!-- Purchase Celebration Overlay -->
+  <div id="purchase-anim-overlay" style="display:none;"></div>
+
   <!-- Credits Overlay — at app level so it is never clipped by canvas-wrap overflow:hidden -->
   <div id="credits-overlay" class="hidden">
     <div style="
@@ -4788,7 +4866,7 @@ const G={
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PW=28,PH=28,PLAYER_X=194,FLOOR_Y=BASE_H-130,CEIL_Y=55;
-const GRAV_STR=5500,MAX_FALL=3000;
+const GRAV_STR=7200,MAX_FALL=3800;
 const OB_COLORS=['#00f5ff','#ff006e','#bf00ff','#39ff14','#ff9900'];
 // XP_PER_SECOND removed
 const COIN_VALUE=5;
@@ -4943,24 +5021,28 @@ function spawnFlipParticles(){
     ? `hsl(${(G.elapsed*120)%360},100%,60%)`
     : (G.onFloor ? skin.color : skin.altColor);
   const accentColor = G.onFloor ? '#00f5ff' : '#ff006e';
-  const n1=IS_MOBILE?8:16, n2=IS_MOBILE?5:10, n3=IS_MOBILE?4:8, n4=IS_MOBILE?3:6;
+  const n1=IS_MOBILE?12:22, n2=IS_MOBILE?7:14, n3=IS_MOBILE?6:12, n4=IS_MOBILE?5:9;
 
+  // Layer 1 — main burst ring (bigger radius, larger dots)
   for(let i=0;i<n1;i++){
-    const a=(Math.PI*2/n1)*i, spd=140+Math.random()*200;
-    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,3+Math.random()*3,2.5+Math.random()*2,baseColor);
+    const a=(Math.PI*2/n1)*i, spd=220+Math.random()*280;
+    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,5+Math.random()*5,3+Math.random()*2.5,baseColor);
   }
+  // Layer 2 — white sparkles (faster, more spread)
   for(let i=0;i<n2;i++){
-    const a=Math.random()*Math.PI*2, spd=200+Math.random()*120;
-    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,0.9,2+Math.random()*2,2,'#ffffff');
+    const a=Math.random()*Math.PI*2, spd=280+Math.random()*180;
+    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,0.9,3+Math.random()*3,2.5,'#ffffff');
   }
+  // Layer 3 — accent color big dots (evenly spread)
   for(let i=0;i<n3;i++){
-    const a=(Math.PI*2/n3)*i, spd=100+Math.random()*150;
-    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,5,3,accentColor);
+    const a=(Math.PI*2/n3)*i, spd=160+Math.random()*220;
+    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,8,3.5,accentColor);
   }
+  // Layer 4 — skin alt color floaters
   const _h2 = ((G.elapsed*120)+120)%360;
   for(let i=0;i<n4;i++){
-    const a=Math.random()*Math.PI*2, spd=60+Math.random()*80;
-    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd-50,0.8,3,2,skin.rainbow?`hsl(${_h2},100%,60%)`:skin.altColor);
+    const a=Math.random()*Math.PI*2, spd=100+Math.random()*140;
+    _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd-60,0.85,5,2.5,skin.rainbow?`hsl(${_h2},100%,60%)`:skin.altColor);
   }
 }
 
@@ -5245,7 +5327,7 @@ function flipGravity(){
   // inside the input event so the player experiences zero delay.
   G.onFloor=!G.onFloor;
   G.grav = G.onFloor ? GRAV_STR : -GRAV_STR;
-  G.vy   = G.onFloor ? -1750 : 1750;
+  G.vy   = G.onFloor ? -2400 : 2400;
 
   G.scaleX=0.55; G.scaleY=1.55;    // squash: rendered next frame, no cost now
   sfxFlip();                         // Web Audio API — schedules async, returns instantly
@@ -5268,8 +5350,9 @@ function flipGravity(){
     }
     ENV.onFlip();
     CINEMA.onFlip();
-    CIN.shake(8);
-    CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, G.onFloor?'#ff006e':'#00f5ff', 160);
+    CIN.shake(22);
+    CIN.flash(G.onFloor ? '#ff006e' : '#00f5ff', 0.18);
+    CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, G.onFloor?'#ff006e':'#00f5ff', 280);
 
     // Achievements — DOM creation, fires at most twice ever
     if(!PROG.ach.firstFlip){ PROG.ach.firstFlip=true; showAchievement('🔄 First Flip!'); }
@@ -5915,7 +5998,7 @@ const CIN = (function(){
     if(!_active) return;
     let s=null; for(let i=0;i<_SMAX;i++) if(!_shocks[i].alive){s=_shocks[i];break;}
     if(!s) s=_shocks[0];
-    s.alive=true; s.x=x; s.y=y; s.r=0; s.maxR=maxR||180; s.t=0; s.color=color||'#00f5ff';
+    s.alive=true; s.x=x; s.y=y; s.r=0; s.maxR=maxR||120; s.t=0; s.color=color||'#00f5ff';
   }
 
   // ── Persistent speed-lines pool ───────────────────────────────────────────
@@ -5971,23 +6054,35 @@ const CIN = (function(){
     for(let i=0;i<_SMAX;i++){
       const s=_shocks[i]; if(!s.alive) continue;
       s.t += dt; s.r = s.maxR * (1 - Math.pow(1-Math.min(1,s.t*2),2));
-      const alpha = Math.max(0, 1.1 - s.t*1.4);
+      const alpha = Math.max(0, 0.9 - s.t*1.6);
       if(alpha <= 0){ s.alive=false; continue; }
       ctx.save();
-      ctx.strokeStyle=s.color; ctx.lineWidth=5*(1-s.t*0.5);
-      ctx.globalAlpha=alpha;
-      ctx.shadowColor=s.color; ctx.shadowBlur=32*_SB_SCALE;
+      // Outer fat glow ring
+      ctx.shadowColor=s.color; ctx.shadowBlur=48*_SB_SCALE;
+      ctx.strokeStyle=s.color; ctx.lineWidth=7*(1-s.t*0.5);
+      ctx.globalAlpha=alpha*0.38;
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
+      // Main ring
+      ctx.shadowBlur=28*_SB_SCALE;
+      ctx.lineWidth=4*(1-s.t*0.55);
+      ctx.globalAlpha=alpha;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
+      // Inner echo ring
       ctx.lineWidth=2; ctx.globalAlpha=alpha*0.55;
+      ctx.shadowBlur=14*_SB_SCALE;
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.6, 0, Math.PI*2); ctx.stroke();
+      // White hot core highlight
+      ctx.strokeStyle='#ffffff'; ctx.lineWidth=1.2; ctx.globalAlpha=alpha*0.35;
+      ctx.shadowColor='#ffffff'; ctx.shadowBlur=10*_SB_SCALE;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.98, 0, Math.PI*2); ctx.stroke();
       ctx.shadowBlur=0; ctx.restore();
     }
 
     // ── Screen shake ─────────────────────────────────────────────────────────
     if(_shakeAmt > 0.3){
-      _shakeX = (Math.random()-.5)*_shakeAmt*3.5;
-      _shakeY = (Math.random()-.5)*_shakeAmt*3.5;
-      _shakeAmt *= 0.68;
+      _shakeX = (Math.random()-.5)*_shakeAmt*2.4;
+      _shakeY = (Math.random()-.5)*_shakeAmt*2.4;
+      _shakeAmt *= 0.62;
       ctx.translate(_shakeX, _shakeY);
     } else { _shakeAmt=0; }
 
@@ -6002,7 +6097,7 @@ const CIN = (function(){
       ctx.fillStyle = `rgba(${fr},${fg2},${fb},0.55)`;
       ctx.fillRect(0, CEIL_Y, BASE_W, FLOOR_Y-CEIL_Y);
       ctx.restore();
-      _flashA *= 0.78;
+      _flashA *= 0.68;
     }
 
     // ── Vignette — cached, only rebuild when speed changes significantly ──────
@@ -7692,10 +7787,10 @@ const CINEMA = (function(){
       if(s.life > 0) continue;
       s.x     = BASE_W + 20;
       s.y     = CEIL_Y + 14 + Math.random() * (FLOOR_Y - CEIL_Y - 28);
-      s.len   = 80 + Math.random() * 220 + speedNormSmooth * 160;
-      s.w     = 1.0 + Math.random() * 2.0;
-      s.speed = (G.speed * 1.8) + Math.random() * 90;
-      s.alpha = 0.28 + Math.random() * 0.35 + speedNormSmooth * 0.3;
+      s.len   = 40 + Math.random() * 120 + speedNormSmooth * 100;
+      s.w     = 0.5 + Math.random() * 1.2;
+      s.speed = (G.speed * 1.4) + Math.random() * 60;
+      s.alpha = 0.18 + Math.random() * 0.22 + speedNormSmooth * 0.2;
       s.life  = 1;
       s.col   = STREAK_COLORS[(_colorIdx++)%STREAK_COLORS.length];
       if(i >= streakActive) streakActive = i+1;
@@ -7709,11 +7804,11 @@ const CINEMA = (function(){
       if(o.life > 0) continue;
       o.x       = BASE_W + 60;
       o.y       = CEIL_Y + 35 + Math.random() * (FLOOR_Y - CEIL_Y - 70);
-      o.r       = 35 + Math.random() * 75;
+      o.r       = 20 + Math.random() * 45;
       o.speed   = G.speed * (0.35 + Math.random() * 0.2);
       o.maxLife = 0.9 + Math.random() * 0.6;
       o.life    = 1;
-      o.alpha   = 0.07 + Math.random() * 0.08;
+      o.alpha   = 0.03 + Math.random() * 0.04;
       o.col     = STREAK_COLORS[Math.floor(Math.random()*STREAK_COLORS.length)];
       if(i >= orbActive) orbActive = i+1;
       return;
@@ -7727,7 +7822,7 @@ const CINEMA = (function(){
       w.x    = G.px + 14;
       w.y    = G.py + 14;
       w.r    = 8;
-      w.maxR = 90 + Math.random() * 40;
+      w.maxR = 140 + Math.random() * 60;
       w.life = 1;
       w.col  = col || '#00f5ff';
       if(i >= waveActive) waveActive = i+1;
@@ -7739,13 +7834,14 @@ const CINEMA = (function(){
   function onFlip(){
     const col = G.onFloor ? '#00f5ff' : '#ff006e';
     spawnWave(col);
-    spawnWave(col); // double wave for impact
-    zoomPulseTarget = 1.022; // stronger zoom punch on flip
+    spawnWave(col); // double wave for bass impact
+    // Bass punch zoom — bigger snap
+    zoomPulseTarget = 1.022;
   }
 
   function onNearMiss(){
-    zoomPulseTarget = 1.045; // dramatic zoom on near-miss
-    spawnWave('#ffd700'); // extra golden ring
+    // Stronger zoom-in pulse — 1.5% zoom in, springs back
+    zoomPulseTarget = 1.015;
   }
 
   // ── update() ─────────────────────────────────────────────────────────────
@@ -7755,11 +7851,11 @@ const CINEMA = (function(){
     speedNormSmooth = lerpC(speedNormSmooth, speedNorm, clamp(rawDt * 3, 0, 1));
 
     // Zoom pulse spring back to 1.0
-    zoomPulseTarget = lerpC(zoomPulseTarget, 1.0, clamp(rawDt * 4, 0, 1));
-    zoomPulse       = lerpC(zoomPulse, zoomPulseTarget, clamp(rawDt * 10, 0, 1));
+    zoomPulseTarget = lerpC(zoomPulseTarget, 1.0, clamp(rawDt * 8, 0, 1));
+    zoomPulse       = lerpC(zoomPulse, zoomPulseTarget, clamp(rawDt * 14, 0, 1));
 
     // Foreground streaks — spawn rate scales with speed
-    const spawnRate = 0.07 + speedNormSmooth * 0.06; // faster spawn for denser streaks
+    const spawnRate = 0.15 + speedNormSmooth * 0.1; // reduced spawn rate for performance
     streakSpawnTimer -= dt;
     if(streakSpawnTimer <= 0 && streakActive < STREAK_MAX){
       streakSpawnTimer = spawnRate;
@@ -7853,20 +7949,33 @@ const CINEMA = (function(){
       for(let i=0;i<waveActive;i++){
         const w = wavePool[i];
         if(w.life <= 0) continue;
-        const a = Math.max(0, w.life) * 0.85;
-        // Outer ring
-        ctx.strokeStyle=w.col;
-        ctx.lineWidth=lerpC(4.5,0.5,1-w.life);
-        ctx.globalAlpha=a;
-        ctx.shadowColor=w.col; ctx.shadowBlur=18;
-        ctx.beginPath(); ctx.arc(w.x,w.y,w.r,0,Math.PI*2); ctx.stroke();
-        // Inner ring (smaller, fainter)
-        ctx.lineWidth=lerpC(2,0.3,1-w.life);
-        ctx.globalAlpha=a*0.45;
-        ctx.beginPath(); ctx.arc(w.x,w.y,w.r*0.5,0,Math.PI*2); ctx.stroke();
-        ctx.shadowBlur=0;
+        const a = Math.max(0, w.life) * 0.70;
+        const lw = lerpC(4.5, 0.8, 1 - w.life);
+
+        // Outer glow ring (thick, blurred)
+        ctx.shadowColor = w.col;
+        ctx.shadowBlur  = lerpC(32, 8, 1 - w.life);
+        ctx.strokeStyle = w.col;
+        ctx.lineWidth   = lw * 2.2;
+        ctx.globalAlpha = a * 0.35;
+        ctx.beginPath(); ctx.arc(w.x, w.y, w.r, 0, Math.PI*2); ctx.stroke();
+
+        // Mid shimmer ring (bright core)
+        ctx.shadowBlur  = lerpC(18, 4, 1 - w.life);
+        ctx.lineWidth   = lw;
+        ctx.globalAlpha = a;
+        ctx.beginPath(); ctx.arc(w.x, w.y, w.r, 0, Math.PI*2); ctx.stroke();
+
+        // Inner bright highlight ring (thin, sharp)
+        ctx.shadowBlur  = lerpC(10, 2, 1 - w.life);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth   = lw * 0.4;
+        ctx.globalAlpha = a * 0.55;
+        ctx.beginPath(); ctx.arc(w.x, w.y, w.r * 0.88, 0, Math.PI*2); ctx.stroke();
+
+        ctx.shadowBlur = 0;
       }
-      ctx.globalAlpha=1;
+      ctx.globalAlpha = 1;
       ctx.restore();
     }
   }
@@ -7881,8 +7990,8 @@ const CINEMA = (function(){
     const _vk=cw+'|'+ch+'|'+(Math.round(speedNormSmooth*20)/20).toFixed(2);
     if(_vk!==_vigKey||!_vigGrad){
       _vigKey=_vk;
-      const vigAlpha=0.62+speedNormSmooth*0.22;
-      const vigInner=0.38+speedNormSmooth*0.08;
+      const vigAlpha=0.42+speedNormSmooth*0.14;
+      const vigInner=0.45+speedNormSmooth*0.05;
       _vigGrad=ctx.createRadialGradient(cx,cy,outerR*vigInner,cx,cy,outerR*1.05);
       _vigGrad.addColorStop(0,'rgba(0,0,0,0)');
       _vigGrad.addColorStop(1,`rgba(0,0,0,${vigAlpha.toFixed(2)})`);
@@ -8548,15 +8657,125 @@ function renderStore() {
 }
 
 function showStoreToast(msg, color) {
-  const t = document.createElement('div');
-  t.style.cssText = `position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
-    background:rgba(5,10,20,.96);border:1px solid ${color};color:${color};
-    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;
-    padding:8px 20px;border-radius:20px;z-index:300;pointer-events:none;
-    box-shadow:0 0 16px ${color}44;animation:toastIn .3s ease-out;white-space:nowrap;`;
-  t.textContent = msg;
-  document.getElementById('store-box').appendChild(t);
-  setTimeout(() => t.remove(), 1800);
+  // Route purchase/unlock events to the big animation, errors to simple toast
+  if (msg.includes('Not enough')) {
+    const t = document.createElement('div');
+    t.style.cssText = `position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
+      background:rgba(5,10,20,.96);border:1px solid ${color};color:${color};
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;
+      padding:8px 20px;border-radius:20px;z-index:300;pointer-events:none;
+      box-shadow:0 0 16px ${color}44;animation:toastIn .3s ease-out;white-space:nowrap;`;
+    t.textContent = msg;
+    document.getElementById('store-box').appendChild(t);
+    setTimeout(() => t.remove(), 1800);
+    return;
+  }
+  showPurchaseAnimation(msg, color);
+}
+
+function showPurchaseAnimation(msg, color) {
+  const overlay = document.getElementById('purchase-anim-overlay');
+  if (!overlay) return;
+  overlay.innerHTML = '';
+  overlay.style.display = 'flex';
+
+  const isEquip   = msg.includes('equipped') || msg.startsWith('✓');
+  const isUpgrade = msg.includes('upgraded') || msg.includes('⬆');
+  const isUnlock  = msg.includes('unlocked') || msg.includes('🎉') || msg.includes('🌈');
+
+  const emoji     = isUpgrade ? '⬆' : isUnlock ? '🎉' : '✓';
+  const topLabel  = isUpgrade ? 'UPGRADED!' : isUnlock ? 'UNLOCKED!' : 'EQUIPPED!';
+  // Clean message for sublabel
+  const subText   = msg.replace(/^[🎉✓⬆🌈]\s*/,'').replace(/ (unlocked|upgraded|equipped)!?$/i,'').trim();
+
+  // ── Burst rings ──────────────────────────────────────────────────────────
+  const ringDefs = [
+    { size: 80,  delay: 0,     dur: 0.7, lw: 4 },
+    { size: 160, delay: 0.06,  dur: 0.8, lw: 3 },
+    { size: 260, delay: 0.12,  dur: 0.95,lw: 2.5 },
+    { size: 380, delay: 0.20,  dur: 1.1, lw: 2 },
+    { size: 520, delay: 0.30,  dur: 1.25,lw: 1.5 },
+  ];
+  ringDefs.forEach(({ size, delay, dur, lw }) => {
+    const ring = document.createElement('div');
+    ring.className = 'purchase-burst-ring';
+    ring.style.cssText = `
+      width:${size}px; height:${size}px;
+      border-color:${color};
+      border-width:${lw}px;
+      box-shadow:0 0 ${lw*12}px ${color}88, inset 0 0 ${lw*8}px ${color}44;
+      animation-delay:${delay}s; animation-duration:${dur}s;
+    `;
+    overlay.appendChild(ring);
+  });
+
+  // Second set — white shimmer rings
+  [120, 240, 400].forEach((size, i) => {
+    const ring = document.createElement('div');
+    ring.className = 'purchase-burst-ring';
+    ring.style.cssText = `
+      width:${size}px; height:${size}px;
+      border-color:#ffffff;
+      border-width:1px;
+      box-shadow:0 0 8px #ffffff55;
+      animation-delay:${0.04 + i*0.08}s; animation-duration:${0.75 + i*0.15}s;
+      opacity:0.5;
+    `;
+    overlay.appendChild(ring);
+  });
+
+  // ── Flying particles ─────────────────────────────────────────────────────
+  const PARTICLE_COUNT = 28;
+  const pColors = [color, '#ffffff', '#ffd700', color + 'bb'];
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const angle = (i / PARTICLE_COUNT) * Math.PI * 2 + Math.random() * 0.4;
+    const dist  = 90 + Math.random() * 180;
+    const tx    = Math.cos(angle) * dist;
+    const ty    = Math.sin(angle) * dist;
+    const size  = 4 + Math.random() * 8;
+    const dur   = 0.6 + Math.random() * 0.6;
+    const delay = Math.random() * 0.15;
+    const pc    = pColors[Math.floor(Math.random() * pColors.length)];
+    const p = document.createElement('div');
+    p.className = 'purchase-particle';
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      background:${pc};
+      box-shadow:0 0 ${size*2}px ${pc};
+      --tx:${tx}px; --ty:${ty}px; --dur:${dur}s;
+      animation-delay:${delay}s;
+    `;
+    overlay.appendChild(p);
+  }
+
+  // ── Scanlines ────────────────────────────────────────────────────────────
+  [-60, 0, 60].forEach((offset, i) => {
+    const sl = document.createElement('div');
+    sl.className = 'purchase-scanline';
+    sl.style.cssText = `
+      top:calc(50% + ${offset}px);
+      background:linear-gradient(90deg, transparent, ${color}99, transparent);
+      transform-origin: center;
+      animation-delay:${i * 0.04}s;
+    `;
+    overlay.appendChild(sl);
+  });
+
+  // ── Center card ──────────────────────────────────────────────────────────
+  const card = document.createElement('div');
+  card.className = 'purchase-center-card';
+  card.innerHTML = `
+    <div class="purchase-emoji" style="color:${color};">${emoji}</div>
+    <div class="purchase-label" style="color:${color};">${topLabel}</div>
+    ${subText ? `<div class="purchase-sublabel">${subText}</div>` : ''}
+  `;
+  overlay.appendChild(card);
+
+  // ── Cleanup ───────────────────────────────────────────────────────────────
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    overlay.innerHTML = '';
+  }, 2000);
 }
 
 // Store button listeners
