@@ -775,100 +775,6 @@
   @keyframes toastIn  { from{transform:translateY(14px);opacity:0} to{transform:translateY(0);opacity:1} }
   @keyframes toastOut { to{transform:translateY(-8px);opacity:0} }
 
-  /* ── No Coins Center Popup ── */
-  #no-coins-popup {
-    display:none;
-    position:fixed; inset:0; z-index:9998;
-    align-items:center; justify-content:center;
-    pointer-events:none;
-  }
-  #no-coins-popup.show { display:flex; }
-  .no-coins-box {
-    display:flex; flex-direction:column; align-items:center;
-    gap:clamp(8px,1.5vh,14px);
-    padding:clamp(22px,4vh,36px) clamp(28px,6vw,52px);
-    background:linear-gradient(145deg, rgba(8,2,18,.98) 0%, rgba(20,2,10,.98) 100%);
-    border:1.5px solid rgba(255,0,110,.55);
-    border-radius:20px;
-    box-shadow:
-      0 0 0 1px rgba(255,0,110,.12),
-      0 0 40px rgba(255,0,110,.25),
-      0 0 80px rgba(255,0,110,.1),
-      0 20px 60px rgba(0,0,0,.85);
-    animation: noCoinsIn .35s cubic-bezier(.34,1.56,.64,1) both;
-    position:relative; overflow:hidden;
-    max-width: min(340px, 88vw);
-  }
-  /* Top glow line */
-  .no-coins-box::before {
-    content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(255,0,110,.8) 40%, rgba(255,0,110,.8) 60%, transparent);
-  }
-  /* Subtle radial bg glow */
-  .no-coins-box::after {
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,0,110,.08) 0%, transparent 70%);
-  }
-  .no-coins-icon {
-    font-size:clamp(36px,8vw,52px);
-    animation: noCoinsShake .5s cubic-bezier(.36,.07,.19,.97) .15s both;
-    filter: drop-shadow(0 0 12px rgba(255,0,110,.7));
-    position:relative; z-index:1;
-  }
-  .no-coins-title {
-    font-family:'Orbitron',monospace;
-    font-size:clamp(13px,3.5vw,18px);
-    font-weight:900; letter-spacing:3px;
-    color:#ff006e;
-    text-shadow: 0 0 14px rgba(255,0,110,.9), 0 0 28px rgba(255,0,110,.4);
-    text-align:center; white-space:nowrap;
-    position:relative; z-index:1;
-  }
-  .no-coins-sub {
-    font-family:'Rajdhani',sans-serif;
-    font-size:clamp(11px,2.5vw,14px);
-    font-weight:600; letter-spacing:1.5px;
-    color:rgba(255,255,255,.45);
-    text-align:center;
-    position:relative; z-index:1;
-  }
-  /* Coin count hint */
-  .no-coins-hint {
-    display:flex; align-items:center; gap:6px;
-    padding:6px 16px;
-    background:rgba(255,215,0,.07);
-    border:1px solid rgba(255,215,0,.2);
-    border-radius:20px;
-    font-family:'Orbitron',monospace;
-    font-size:clamp(10px,2.2vw,13px);
-    font-weight:700; letter-spacing:1px;
-    color:rgba(255,215,0,.8);
-    text-shadow:0 0 10px rgba(255,215,0,.5);
-    position:relative; z-index:1;
-    animation: noCoinsHintPop .4s cubic-bezier(.34,1.56,.64,1) .25s both;
-  }
-  @keyframes noCoinsIn {
-    0%   { opacity:0; transform:scale(.7) translateY(10px); }
-    60%  { transform:scale(1.05) translateY(-3px); }
-    100% { opacity:1; transform:scale(1) translateY(0); }
-  }
-  @keyframes noCoinsOut {
-    0%   { opacity:1; transform:scale(1); }
-    100% { opacity:0; transform:scale(.88) translateY(-8px); }
-  }
-  @keyframes noCoinsShake {
-    0%,100% { transform:translateX(0) rotate(0deg); }
-    15%     { transform:translateX(-6px) rotate(-8deg); }
-    30%     { transform:translateX(6px)  rotate(8deg); }
-    45%     { transform:translateX(-4px) rotate(-5deg); }
-    60%     { transform:translateX(4px)  rotate(4deg); }
-    75%     { transform:translateX(-2px) rotate(-2deg); }
-  }
-  @keyframes noCoinsHintPop {
-    0%   { opacity:0; transform:scale(.8); }
-    100% { opacity:1; transform:scale(1); }
-  }
-
   /* levelup popup removed */
   #levelup-popup { display:none!important; }
 
@@ -3030,16 +2936,6 @@
     <div class="rotate-icon">📱</div>
     <div class="rotate-title">ROTATE YOUR DEVICE</div>
     <div class="rotate-sub">Please rotate to landscape mode for the best experience</div>
-  </div>
-
-  <!-- ── Not Enough Coins Center Popup ── -->
-  <div id="no-coins-popup">
-    <div class="no-coins-box">
-      <div class="no-coins-icon">🪙</div>
-      <div class="no-coins-title">NOT ENOUGH COINS</div>
-      <div class="no-coins-sub">Keep playing to earn more!</div>
-      <div class="no-coins-hint" id="no-coins-hint-val">₹ 0 / 0</div>
-    </div>
   </div>
 
   <div id="bg-grad"></div>
@@ -6019,7 +5915,7 @@ const CIN = (function(){
     if(!_active) return;
     let s=null; for(let i=0;i<_SMAX;i++) if(!_shocks[i].alive){s=_shocks[i];break;}
     if(!s) s=_shocks[0];
-    s.alive=true; s.x=x; s.y=y; s.r=0; s.maxR=maxR||120; s.t=0; s.color=color||'#00f5ff';
+    s.alive=true; s.x=x; s.y=y; s.r=0; s.maxR=maxR||180; s.t=0; s.color=color||'#00f5ff';
   }
 
   // ── Persistent speed-lines pool ───────────────────────────────────────────
@@ -6075,23 +5971,23 @@ const CIN = (function(){
     for(let i=0;i<_SMAX;i++){
       const s=_shocks[i]; if(!s.alive) continue;
       s.t += dt; s.r = s.maxR * (1 - Math.pow(1-Math.min(1,s.t*2),2));
-      const alpha = Math.max(0, 0.9 - s.t*1.6);
+      const alpha = Math.max(0, 1.1 - s.t*1.4);
       if(alpha <= 0){ s.alive=false; continue; }
       ctx.save();
-      ctx.strokeStyle=s.color; ctx.lineWidth=3.5*(1-s.t*0.6);
+      ctx.strokeStyle=s.color; ctx.lineWidth=5*(1-s.t*0.5);
       ctx.globalAlpha=alpha;
-      ctx.shadowColor=s.color; ctx.shadowBlur=22*_SB_SCALE;
+      ctx.shadowColor=s.color; ctx.shadowBlur=32*_SB_SCALE;
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
-      ctx.lineWidth=1.5; ctx.globalAlpha=alpha*0.5;
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.55, 0, Math.PI*2); ctx.stroke();
+      ctx.lineWidth=2; ctx.globalAlpha=alpha*0.55;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.6, 0, Math.PI*2); ctx.stroke();
       ctx.shadowBlur=0; ctx.restore();
     }
 
     // ── Screen shake ─────────────────────────────────────────────────────────
     if(_shakeAmt > 0.3){
-      _shakeX = (Math.random()-.5)*_shakeAmt*2;
-      _shakeY = (Math.random()-.5)*_shakeAmt*2;
-      _shakeAmt *= 0.72;
+      _shakeX = (Math.random()-.5)*_shakeAmt*3.5;
+      _shakeY = (Math.random()-.5)*_shakeAmt*3.5;
+      _shakeAmt *= 0.68;
       ctx.translate(_shakeX, _shakeY);
     } else { _shakeAmt=0; }
 
@@ -7796,10 +7692,10 @@ const CINEMA = (function(){
       if(s.life > 0) continue;
       s.x     = BASE_W + 20;
       s.y     = CEIL_Y + 14 + Math.random() * (FLOOR_Y - CEIL_Y - 28);
-      s.len   = 40 + Math.random() * 120 + speedNormSmooth * 100;
-      s.w     = 0.5 + Math.random() * 1.2;
-      s.speed = (G.speed * 1.4) + Math.random() * 60;
-      s.alpha = 0.18 + Math.random() * 0.22 + speedNormSmooth * 0.2;
+      s.len   = 80 + Math.random() * 220 + speedNormSmooth * 160;
+      s.w     = 1.0 + Math.random() * 2.0;
+      s.speed = (G.speed * 1.8) + Math.random() * 90;
+      s.alpha = 0.28 + Math.random() * 0.35 + speedNormSmooth * 0.3;
       s.life  = 1;
       s.col   = STREAK_COLORS[(_colorIdx++)%STREAK_COLORS.length];
       if(i >= streakActive) streakActive = i+1;
@@ -7813,11 +7709,11 @@ const CINEMA = (function(){
       if(o.life > 0) continue;
       o.x       = BASE_W + 60;
       o.y       = CEIL_Y + 35 + Math.random() * (FLOOR_Y - CEIL_Y - 70);
-      o.r       = 20 + Math.random() * 45;
+      o.r       = 35 + Math.random() * 75;
       o.speed   = G.speed * (0.35 + Math.random() * 0.2);
       o.maxLife = 0.9 + Math.random() * 0.6;
       o.life    = 1;
-      o.alpha   = 0.03 + Math.random() * 0.04;
+      o.alpha   = 0.07 + Math.random() * 0.08;
       o.col     = STREAK_COLORS[Math.floor(Math.random()*STREAK_COLORS.length)];
       if(i >= orbActive) orbActive = i+1;
       return;
@@ -7831,7 +7727,7 @@ const CINEMA = (function(){
       w.x    = G.px + 14;
       w.y    = G.py + 14;
       w.r    = 8;
-      w.maxR = 55 + Math.random() * 20;
+      w.maxR = 90 + Math.random() * 40;
       w.life = 1;
       w.col  = col || '#00f5ff';
       if(i >= waveActive) waveActive = i+1;
@@ -7843,13 +7739,13 @@ const CINEMA = (function(){
   function onFlip(){
     const col = G.onFloor ? '#00f5ff' : '#ff006e';
     spawnWave(col);
-    // Briefly boost zoom-in a tiny amount (0.5% extra zoom for 200ms)
-    zoomPulseTarget = 1.005;
+    spawnWave(col); // double wave for impact
+    zoomPulseTarget = 1.022; // stronger zoom punch on flip
   }
 
   function onNearMiss(){
-    // Stronger zoom-in pulse — 1.5% zoom in, springs back
-    zoomPulseTarget = 1.015;
+    zoomPulseTarget = 1.045; // dramatic zoom on near-miss
+    spawnWave('#ffd700'); // extra golden ring
   }
 
   // ── update() ─────────────────────────────────────────────────────────────
@@ -7859,11 +7755,11 @@ const CINEMA = (function(){
     speedNormSmooth = lerpC(speedNormSmooth, speedNorm, clamp(rawDt * 3, 0, 1));
 
     // Zoom pulse spring back to 1.0
-    zoomPulseTarget = lerpC(zoomPulseTarget, 1.0, clamp(rawDt * 8, 0, 1));
-    zoomPulse       = lerpC(zoomPulse, zoomPulseTarget, clamp(rawDt * 14, 0, 1));
+    zoomPulseTarget = lerpC(zoomPulseTarget, 1.0, clamp(rawDt * 4, 0, 1));
+    zoomPulse       = lerpC(zoomPulse, zoomPulseTarget, clamp(rawDt * 10, 0, 1));
 
     // Foreground streaks — spawn rate scales with speed
-    const spawnRate = 0.15 + speedNormSmooth * 0.1; // reduced spawn rate for performance
+    const spawnRate = 0.07 + speedNormSmooth * 0.06; // faster spawn for denser streaks
     streakSpawnTimer -= dt;
     if(streakSpawnTimer <= 0 && streakActive < STREAK_MAX){
       streakSpawnTimer = spawnRate;
@@ -7957,11 +7853,18 @@ const CINEMA = (function(){
       for(let i=0;i<waveActive;i++){
         const w = wavePool[i];
         if(w.life <= 0) continue;
-        const a = Math.max(0, w.life) * 0.55;
+        const a = Math.max(0, w.life) * 0.85;
+        // Outer ring
         ctx.strokeStyle=w.col;
-        ctx.lineWidth=lerpC(3,0.5,1-w.life);
+        ctx.lineWidth=lerpC(4.5,0.5,1-w.life);
         ctx.globalAlpha=a;
+        ctx.shadowColor=w.col; ctx.shadowBlur=18;
         ctx.beginPath(); ctx.arc(w.x,w.y,w.r,0,Math.PI*2); ctx.stroke();
+        // Inner ring (smaller, fainter)
+        ctx.lineWidth=lerpC(2,0.3,1-w.life);
+        ctx.globalAlpha=a*0.45;
+        ctx.beginPath(); ctx.arc(w.x,w.y,w.r*0.5,0,Math.PI*2); ctx.stroke();
+        ctx.shadowBlur=0;
       }
       ctx.globalAlpha=1;
       ctx.restore();
@@ -7978,8 +7881,8 @@ const CINEMA = (function(){
     const _vk=cw+'|'+ch+'|'+(Math.round(speedNormSmooth*20)/20).toFixed(2);
     if(_vk!==_vigKey||!_vigGrad){
       _vigKey=_vk;
-      const vigAlpha=0.42+speedNormSmooth*0.14;
-      const vigInner=0.45+speedNormSmooth*0.05;
+      const vigAlpha=0.62+speedNormSmooth*0.22;
+      const vigInner=0.38+speedNormSmooth*0.08;
       _vigGrad=ctx.createRadialGradient(cx,cy,outerR*vigInner,cx,cy,outerR*1.05);
       _vigGrad.addColorStop(0,'rgba(0,0,0,0)');
       _vigGrad.addColorStop(1,`rgba(0,0,0,${vigAlpha.toFixed(2)})`);
@@ -8554,7 +8457,7 @@ function renderStore() {
             showStoreToast('🌈 RAINBOW unlocked!', '#bf00ff');
           } else {
             sfxNoCoins();
-            showNoCoinsPopup(skin.price);
+            showStoreToast('Not enough coins! ₹', '#ff006e');
           }
         });
         grid.appendChild(div);
@@ -8590,7 +8493,7 @@ function renderStore() {
           showStoreToast('🎉 ' + skin.name + ' unlocked!', skin.color);
         } else {
           sfxNoCoins();
-          showNoCoinsPopup(skin.price);
+          showStoreToast('Not enough coins! ₹', '#ff006e');
         }
       });
       grid.appendChild(div);
@@ -8631,7 +8534,7 @@ function renderStore() {
       const btn = div.querySelector('.upgrade-btn');
       if (!maxed) {
         btn.addEventListener('click', () => {
-          if (!canAfford) { sfxNoCoins(); showNoCoinsPopup(nextCost); return; }
+          if (!canAfford) { sfxNoCoins(); showStoreToast('Not enough coins! ₹', '#ff006e'); return; }
           PROG.coins -= nextCost;
           PROG.upgrades[upg.id] = upg.maxLevel === 1 ? true : level + 1;
           saveProg(); renderStore();
@@ -8645,11 +8548,6 @@ function renderStore() {
 }
 
 function showStoreToast(msg, color) {
-  // "Not enough coins" gets its own special center popup instead
-  if(msg && msg.toLowerCase().includes('not enough coins')){
-    showNoCoinsPopup();
-    return;
-  }
   const t = document.createElement('div');
   t.style.cssText = `position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
     background:rgba(5,10,20,.96);border:1px solid ${color};color:${color};
@@ -8660,43 +8558,6 @@ function showStoreToast(msg, color) {
   document.getElementById('store-box').appendChild(t);
   setTimeout(() => t.remove(), 1800);
 }
-
-// Dedicated "Not Enough Coins" center popup
-(function(){
-  let _noCoinsTimer = null;
-  window.showNoCoinsPopup = function(requiredCost) {
-    const popup = document.getElementById('no-coins-popup');
-    const hint  = document.getElementById('no-coins-hint-val');
-    if(!popup) return;
-    // Show current coins vs required (if passed)
-    const current = (typeof PROG !== 'undefined' && PROG.coins != null) ? PROG.coins : 0;
-    if(hint){
-      hint.textContent = requiredCost
-        ? '₹ ' + current + ' / ' + requiredCost + ' needed'
-        : '₹ ' + current + ' coins';
-    }
-    // Reset animation by re-inserting box
-    const box = popup.querySelector('.no-coins-box');
-    if(box){ box.style.animation='none'; void box.offsetWidth; box.style.animation=''; }
-    popup.classList.add('show');
-    // Clear any existing timer
-    if(_noCoinsTimer) clearTimeout(_noCoinsTimer);
-    _noCoinsTimer = setTimeout(() => {
-      const b = popup.querySelector('.no-coins-box');
-      if(b){ b.style.animation = 'noCoinsOut .3s ease-in forwards'; }
-      setTimeout(() => { popup.classList.remove('show'); if(b) b.style.animation=''; }, 300);
-      _noCoinsTimer = null;
-    }, 1800);
-  };
-  // Tap anywhere to dismiss early
-  document.getElementById('no-coins-popup').addEventListener('click', function(){
-    if(_noCoinsTimer){ clearTimeout(_noCoinsTimer); _noCoinsTimer = null; }
-    const b = this.querySelector('.no-coins-box');
-    if(b){ b.style.animation = 'noCoinsOut .25s ease-in forwards'; }
-    const self = this;
-    setTimeout(() => { self.classList.remove('show'); if(b) b.style.animation=''; }, 250);
-  });
-})();
 
 // Store button listeners
 (function(){
