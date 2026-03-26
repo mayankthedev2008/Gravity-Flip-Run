@@ -5141,7 +5141,7 @@ function spawnFlipParticles(){
     ? `hsl(${(G.elapsed*120)%360},100%,60%)`
     : (G.onFloor ? skin.color : skin.altColor);
   const accentColor = G.onFloor ? '#00f5ff' : '#ff006e';
-  const n1=IS_MOBILE?12:22, n2=IS_MOBILE?7:14, n3=IS_MOBILE?6:12, n4=IS_MOBILE?5:9;
+  const n1=IS_MOBILE?5:22, n2=IS_MOBILE?3:14, n3=IS_MOBILE?2:12, n4=IS_MOBILE?2:9;
 
   // Layer 1 — main burst ring (bigger radius, larger dots)
   for(let i=0;i<n1;i++){
@@ -5203,7 +5203,7 @@ function _acquireParticle(x,y,vx,vy,life,decay,r,color){
 }
 function spawnDeathParticles(){
   const cx=G.px+G.pw/2, cy=G.py+G.ph/2;
-  for(let i=0;i<10;i++){
+  for(let i=0;i<(IS_MOBILE?4:10);i++){
     const a=(Math.PI*2/10)*i, spd=80+Math.random()*160;
     _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,1.2,3+Math.random()*2,i%3===0?'#ffffff':'#ff006e');
   }
@@ -5260,7 +5260,7 @@ function spawnNearMissParticles(){
     _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,1,4+Math.random()*3,3,'#ff9900');
   }
   // White flash — more
-  for(let i=0;i<10;i++){
+  for(let i=0;i<(IS_MOBILE?6:10);i++){
     const a=Math.random()*Math.PI*2, spd=200+Math.random()*100;
     _acquireParticle(cx,cy,Math.cos(a)*spd,Math.sin(a)*spd,0.9,3,2,'#ffffff');
   }
@@ -5471,8 +5471,7 @@ function flipGravity(){
     ENV.onFlip();
     CINEMA.onFlip();
     CIN.shake(6);
-    CIN.flash(G.onFloor ? '#ff006e' : '#00f5ff', 0.18);
-    CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, G.onFloor?'#ff006e':'#00f5ff', 280);
+    
 
     // Achievements — DOM creation, fires at most twice ever
     if(!PROG.ach.firstFlip){ PROG.ach.firstFlip=true; showAchievement('🔄 First Flip!'); }
@@ -5550,8 +5549,7 @@ function triggerNearMiss(){
   CINEMA.onNearMiss();
   sfxNearMissBass();
   CIN.shake(6);
-  CIN.flash('#00f5ff', 0.50);
-  CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, '#00f5ff', 260);
+  
 
   // ── Tiny particle burst (4 particles only — lightweight) ─────────────
   spawnNearMissParticles();
@@ -6034,8 +6032,8 @@ function triggerDeath(){
   spawnDeathParticles();
   G.dying=true;
   CIN.shake(14);
-  CIN.flash('#ff0040', 0.80);
-  CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, '#ff2040', 320);
+  
+  CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, '#ff2040', IS_MOBILE?55:140);
   CIN.triggerDeathZoom();
   // Pre-death slow motion effect
   G.sloMoTimer=0.75; // match death timer duration
@@ -6098,8 +6096,8 @@ function triggerDeath(){
 const CIN = (function(){
   let _active = true;
   const _isMobile = /Mobi|Android/i.test(navigator.userAgent);
-  const _LMAX = _isMobile ? 16 : 32;
-  const _SMAX = _isMobile ? 4 : 6;
+  const _LMAX = _isMobile ? 0 : 14;
+  const _SMAX = _isMobile ? 1 : 4;
   let _shakeAmt = 0, _shakeX = 0, _shakeY = 0;
   function shake(intensity){ if(!_active) return; _shakeAmt = Math.max(_shakeAmt, intensity); }
 
@@ -6183,19 +6181,19 @@ const CIN = (function(){
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
       } else {
         // Desktop: full multi-layer glow
-        ctx.shadowColor=s.color; ctx.shadowBlur=48*_SB_SCALE;
+        ctx.shadowColor=s.color; ctx.shadowBlur=20*_SB_SCALE;
         ctx.strokeStyle=s.color; ctx.lineWidth=7*(1-s.t*0.5);
         ctx.globalAlpha=alpha*0.38;
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
-        ctx.shadowBlur=28*_SB_SCALE;
+        ctx.shadowBlur=12*_SB_SCALE;
         ctx.lineWidth=4*(1-s.t*0.55);
         ctx.globalAlpha=alpha;
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.stroke();
         ctx.lineWidth=2; ctx.globalAlpha=alpha*0.55;
-        ctx.shadowBlur=14*_SB_SCALE;
+        ctx.shadowBlur=6*_SB_SCALE;
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.6, 0, Math.PI*2); ctx.stroke();
         ctx.strokeStyle='#ffffff'; ctx.lineWidth=1.2; ctx.globalAlpha=alpha*0.35;
-        ctx.shadowColor='#ffffff'; ctx.shadowBlur=10*_SB_SCALE;
+        ctx.shadowColor='#ffffff'; ctx.shadowBlur=4*_SB_SCALE;
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r*0.98, 0, Math.PI*2); ctx.stroke();
       }
       ctx.shadowBlur=0; ctx.restore();
@@ -7650,7 +7648,7 @@ const ENV = (function(){
   }
 
   function onNearMiss(){
-    flashTimer = FLASH_DUR;
+    flashTimer = 0; // flash disabled
     elFlash.classList.add('show');
   }
 
@@ -7857,7 +7855,7 @@ const CINEMA = (function(){
   const elWrap       = document.getElementById('canvas-wrap');
 
   // ── Foreground light streaks (pool) ───────────────────────────────────────
-  const STREAK_MAX  = 6;
+  const STREAK_MAX  = IS_MOBILE ? 0 : 6;
   const streakPool  = [];
   let   streakActive = 0;
   for(let i=0;i<STREAK_MAX;i++){
@@ -7866,7 +7864,7 @@ const CINEMA = (function(){
   let streakSpawnTimer = 0;
 
   // ── Mid-layer glow orbs (pool) ────────────────────────────────────────────
-  const ORB_MAX   = 3;
+  const ORB_MAX   = IS_MOBILE ? 0 : 3;
   const orbPool   = [];
   let   orbActive = 0;
   for(let i=0;i<ORB_MAX;i++){
@@ -7946,7 +7944,7 @@ const CINEMA = (function(){
       w.x    = G.px + 14;
       w.y    = G.py + 14;
       w.r    = 8;
-      w.maxR = 140 + Math.random() * 60;
+      w.maxR = IS_MOBILE ? 60 : 140 + Math.random() * 60;
       w.life = 1;
       w.col  = col || '#00f5ff';
       if(i >= waveActive) waveActive = i+1;
@@ -7958,7 +7956,6 @@ const CINEMA = (function(){
   function onFlip(){
     const col = G.onFloor ? '#00f5ff' : '#ff006e';
     spawnWave(col);
-    spawnWave(col); // double wave for bass impact
     // Bass punch zoom — bigger snap
     zoomPulseTarget = 1.022;
   }
