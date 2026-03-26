@@ -5470,7 +5470,7 @@ function flipGravity(){
     }
     ENV.onFlip();
     CINEMA.onFlip();
-    CIN.shake(22);
+    CIN.shake(6);
     CIN.flash(G.onFloor ? '#ff006e' : '#00f5ff', 0.18);
     CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, G.onFloor?'#ff006e':'#00f5ff', 280);
 
@@ -5549,7 +5549,7 @@ function triggerNearMiss(){
   ENV.onNearMiss();
   CINEMA.onNearMiss();
   sfxNearMissBass();
-  CIN.shake(22);
+  CIN.shake(6);
   CIN.flash('#00f5ff', 0.50);
   CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, '#00f5ff', 260);
 
@@ -6033,7 +6033,7 @@ function triggerDeath(){
   sfxDie();
   spawnDeathParticles();
   G.dying=true;
-  CIN.shake(45);
+  CIN.shake(14);
   CIN.flash('#ff0040', 0.80);
   CIN.spawnShockwave(G.px+G.pw/2, G.py+G.ph/2, '#ff2040', 320);
   CIN.triggerDeathZoom();
@@ -6203,7 +6203,7 @@ const CIN = (function(){
 
     // ── Screen shake ─────────────────────────────────────────────────────────
     if(_shakeAmt > 0.3){
-      const _sm = _isMobile ? 1.2 : 2.4;
+      const _sm = _isMobile ? 0.5 : 0.8;
       _shakeX = (Math.random()-.5)*_shakeAmt*_sm;
       _shakeY = (Math.random()-.5)*_shakeAmt*_sm;
       _shakeAmt *= 0.62;
